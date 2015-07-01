@@ -1,16 +1,19 @@
+//https://community.terminalfour.com/how-to/programmable-layouts---list-of-child-sections/
 /* 
 	Bootstrap NAVBAR replacement for T4 
    	Ben Margevicius; bdm4@case.edu
-	Version 6/24/2015
+	Version 6/18/2015
     
     The rules for boot strap navigation:
     1) No GreatGrand Children menus/ sub-sub menus/ Dropdowns will NOT have other dropdowns. This is stamped and sealed by twitter bootstrap. Thou shalt not whine. 
     2) If a section has grandchildren, they are listed in a drop down list (DDL). The root of the DDL is not a navigatable anchor tag <a href="#">Home</a>. If it is kiss your responsive mobile menus goodbye. 
     3) If a section does not have grandchildren it is a navigatable anchor tag.
     
-    Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
+    Github source: https://github.com/CaseWesternReserveUniversity/T4-Bootstrap-NAVBar/
     
-    6/24/2015 - Initial 	
+    6/18/2015 - Initial 
+    6/22/2015 - Switched to IIFE in anticipation of expanding this T4Utils Class into a more reusable utility. 
+    6/23/2015 - getSectionInfo.getRootPath working.
 */
  
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
