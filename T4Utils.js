@@ -1,7 +1,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.12 
+	Version 0.12.1
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
     6/24/2015 - Initial
@@ -11,7 +11,7 @@
 				Added utils.siteManager.version, and utils.siteManager.buildDetails;
 				Added utils.brokerUtils namespace
 				Added utils.brokerUtils.processT4Tags
-	7/1/2015	Added utils.console(method, text) used to write debugging statements to the console.
+	7/1/2015	Added utils.console(method, textOrObj) used to write debugging statements to the console.
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -32,8 +32,17 @@ var T4Utils = (function (utils) {
 	//version of this utility class
 	utils.version = 'v0.12';	
 	
-	utils.console = function(consoleMethod, text) {		
-		document.write("<script>console." + consoleMethod + "(" + text + ");</script>");
+	/*
+		Basic console writing method.
+		Usage: 
+		T4Utils.console('log','Hello from console');
+		T4Utils.console('warn','warning from console');
+		
+		ToDo: write objects to the console... 
+	*/
+	utils.console = function(consoleMethod, textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>");				
 	};
     utils.write = function(text)
     {
