@@ -1,7 +1,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.12.1
+	Version 0.13.0
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
     6/24/2015 - Initial
@@ -12,6 +12,9 @@
 				Added utils.brokerUtils namespace
 				Added utils.brokerUtils.processT4Tags
 	7/1/2015	Added utils.console(method, textOrObj) used to write debugging statements to the console.
+	7/2/2015 	Added utils.elementInfo namspace to return info about elements 
+				Added utils.elementInfo.getElements to return an array of elements
+				Added utils.elementInfo.getElementValue(element) to return the value of an element. 
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -30,7 +33,7 @@ var T4Utils = (function (utils) {
        Writes some text between some paragraph tags
     */
 	//version of this utility class
-	utils.version = 'v0.12';	
+	utils.version = 'v0.13';	
 	
 	/*
 		Basic console writing method.
@@ -66,6 +69,22 @@ var T4Utils = (function (utils) {
 		var myContent = content || null; 
 		return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
 	};
+	/*
+	  contentInfo namespace gets information about content	
+		note: in layouts content will be null.
+	*/
+	utils.elementInfo = utils.elementInfo || {};
+	utils.elementInfo.getElements = function() {
+		var c = content || null;
+		if(c !== null)
+			c.getElements();	
+	}
+	utils.elementInfo.getElementValue = function(element) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(element).publish();		
+	}
 	
     /* 
 	
