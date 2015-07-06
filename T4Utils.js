@@ -1,7 +1,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.13.0
+	Version 0.13.1
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
     6/24/2015 - Initial
@@ -15,6 +15,8 @@
 	7/2/2015 	Added utils.elementInfo namspace to return info about elements 
 				Added utils.elementInfo.getElements to return an array of elements
 				Added utils.elementInfo.getElementValue(element) to return the value of an element. 
+	7/6/2015	Added utils.elementInfo.getElementName(element).
+	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -33,7 +35,7 @@ var T4Utils = (function (utils) {
        Writes some text between some paragraph tags
     */
 	//version of this utility class
-	utils.version = 'v0.13';	
+	utils.version = 'v0.13.1';	
 	
 	/*
 		Basic console writing method.
@@ -47,6 +49,19 @@ var T4Utils = (function (utils) {
 		if(typeof textOrObj === "string")			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>");				
 	};
+	utils.console.log = function(textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console.log('" + textOrObj + "');</script>");				
+	};
+	utils.console.warn = function(textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console.warn('" + textOrObj + "');</script>");				
+	};
+	utils.console.error = function(textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console.error('" + textOrObj + "');</script>");				
+	};
+	
     utils.write = function(text)
     {
       document.write("<p>" + text + "</p>");
@@ -79,12 +94,20 @@ var T4Utils = (function (utils) {
 		if(c !== null)
 			c.getElements();	
 	}
-	utils.elementInfo.getElementValue = function(element) 
+	utils.elementInfo.getElementValue = function(elementName) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(element).publish();		
+			return c.get(elementName).publish();		
 	}
+	//This may not work. 
+	utils.elementInfo.getElementName = function(element) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(element).getName();		
+	}
+		
 	
     /* 
 	
