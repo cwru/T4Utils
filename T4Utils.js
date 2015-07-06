@@ -77,7 +77,7 @@ var T4Utils = (function (utils) {
 	utils.elementInfo.getElements = function() {
 		var c = content || null;
 		if(c !== null)
-			c.getElements();	
+			c.list();	
 	}
 	utils.elementInfo.getElementValue = function(element) 
 	{
