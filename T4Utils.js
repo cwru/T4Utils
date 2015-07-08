@@ -1,7 +1,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.13.1
+	Version 0.13.2
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
     6/24/2015 - Initial
@@ -16,6 +16,8 @@
 				Added utils.elementInfo.getElements to return an array of elements
 				Added utils.elementInfo.getElementValue(element) to return the value of an element. 
 	7/6/2015	Added utils.elementInfo.getElementName(element).
+	7/8/2015	Added newline chars for pretty printing of console and write methods
+				Added utils.siteManager.javaVersion
 	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
@@ -35,7 +37,7 @@ var T4Utils = (function (utils) {
        Writes some text between some paragraph tags
     */
 	//version of this utility class
-	utils.version = 'v0.13.1';	
+	utils.version = 'v0.13.2';	
 	
 	/*
 		Basic console writing method.
@@ -47,24 +49,24 @@ var T4Utils = (function (utils) {
 	*/
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string")			
-			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>");				
+			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
 	};
 	utils.console.log = function(textOrObj) {		
 		if(typeof textOrObj === "string")			
-			document.write("<script>console.log('" + textOrObj + "');</script>");				
+			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
 	};
 	utils.console.warn = function(textOrObj) {		
 		if(typeof textOrObj === "string")			
-			document.write("<script>console.warn('" + textOrObj + "');</script>");				
+			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
 	};
 	utils.console.error = function(textOrObj) {		
 		if(typeof textOrObj === "string")			
-			document.write("<script>console.error('" + textOrObj + "');</script>");				
+			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
 	};
 	
     utils.write = function(text)
     {
-      document.write("<p>" + text + "</p>");
+      document.write("<p>" + text + "</p>\n");
     };
     
 	/* 
@@ -74,7 +76,7 @@ var T4Utils = (function (utils) {
 	//write the version of T4 you are working with.
 	utils.siteManager.version = com.terminalfour.sitemanager.SiteManagerVersion.version;	
 	utils.siteManager.buildDetails = com.terminalfour.sitemanager.SiteManagerVersion.buildDetails;
-	
+	utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
 	/* 
 		BrokerUtils NameSpace does something. I dunno yet.. I'll have to read the API :) 
 	
