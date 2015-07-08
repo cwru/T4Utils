@@ -35,12 +35,15 @@
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
-var T4Utils = (function (utils) {
-  	/* T4Utils.write 
-       Writes some text between some paragraph tags
-    */
-	//version of this utility class
+var T4Utils = (function (utils) {  	
 	utils.version = 'v0.13.2';	
+	
+	/* Console utils for debugging. Don't leave these in your layouts.. 
+		T4Utils.console.log("log message");
+		T4Utils.console.warn("warning");
+		T4Utils.console.error("error message");
+		T4Utils.console('<console method>', '<message>');
+	*/
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string")			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
