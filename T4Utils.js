@@ -1,10 +1,5 @@
-/* 
-	Utility Javascript for T4 Javascript Content Processor
-   	Ben Margevicius; bdm4@case.edu
-	Version 0.13.2
-   
-	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
-    6/24/2015 - Initial
+/*  Versioning    
+	6/24/2015 - Initial
 	6/30/2015 - Added stuff from T4's javascript util (https://community.terminalfour.com/forum/index.php?topic=426.0)
 				Added utils.version;
 				Added utils.siteManager namespace 
@@ -26,7 +21,15 @@
 	Examples:
 	T4Utils.write("Some text"); 
 	var sectionTitle = T4Utils.getSectionInfo.sectionTitle(section);
-	var pathToRootArray = T4Utils.getSectionInfo.getRootPath(section);	
+	var pathToRootArray = T4Utils.getSectionInfo.getRootPath(section);
+*/
+
+/* 
+	Utility Javascript for T4 Javascript Content Processor
+   	Ben Margevicius; bdm4@case.edu
+	Version 0.13.2
+   
+	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
  
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
@@ -38,15 +41,6 @@ var T4Utils = (function (utils) {
     */
 	//version of this utility class
 	utils.version = 'v0.13.2';	
-	
-	/*
-		Basic console writing method.
-		Usage: 
-		T4Utils.console('log','Hello from console');
-		T4Utils.console('warn','warning from console');
-		
-		ToDo: write objects to the console... 
-	*/
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string")			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
