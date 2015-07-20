@@ -13,6 +13,7 @@
 	7/6/2015	Added utils.elementInfo.getElementName(element).
 	7/8/2015	Added newline chars for pretty printing of console and write methods
 				Added utils.siteManager.javaVersion
+	7/20/2015	Added utils.getSectionInfo.getChildren(section, isHiddenInNAV)  
 	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
@@ -27,16 +28,16 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.13.2
+	Version 0.14.0 7/20/15
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
- 
+
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.13.2';	
+	utils.version = 'v0.14.0';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -145,16 +146,30 @@ var T4Utils = (function (utils) {
     };
    	
   
-  //outputs the directory from "section" in a string format
+	//outputs the directory from "section" in a string format
    	utils.getSectionInfo.getDirectory = function(section) {
       	return PathBuilder.getDirectory(section, publishCache, language).toString();		
     }
+	
+	/* 
+    	This is an adaptation of the CachedSection.GetChildren method in the API. 		
+        There is an issue where section.getChildren() does not output the sections in order they are listed in the siteManager.
+        This method will output the expected order in the site manager.
+        if is isHiddenInNAV is true then it will NOT output hidden sections.
+	*/
+	utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
+      	if (isHiddenInNAV === undefined) {
+      		isHiddenInNAV = false;
+        }
+		return section.getChildren(publishCache.channel, language, isHiddenInNAV);
+	}
     
-  /*
-  	GetRootPath(section, path)
-    Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
-    Returns an array of sections until root. Including the current section.    
-  */
+    
+	/*
+		GetRootPath(section, path)
+		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
+		Returns an array of sections until root. Including the current section.    
+	*/
     utils.getSectionInfo.getRootPath = function (nextNode, path) {             
       path = path || []; //if the path is empty create on e
       path.push(nextNode);  //add the next node
