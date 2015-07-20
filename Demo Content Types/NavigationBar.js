@@ -1,7 +1,13 @@
+/*
+	7/20/15
+	Writes a NAV Bar the bootstrap (3.3.5) way. Allows for dropdowns and icons and other neato things given by bootstraps. NAVbar.
+	V0.2 - With the addition of the getSectionInfo.getChildren() we don't have to call isSectionHiddenInNAV() anymore, also this fixes the issue where items on the NAV bar is not outputting in the same order as listed in the site manager.
+*/
+
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.13.2
+	Version 0.14.0
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
@@ -9,20 +15,14 @@
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
-var T4Utils = (function (utils) {
-  	/* T4Utils.write 
-       Writes some text between some paragraph tags
-    */
-	//version of this utility class
-	utils.version = 'v0.13.2';	
+var T4Utils = (function (utils) {  	
+	utils.version = 'v0.14.0';	
 	
-	/*
-		Basic console writing method.
-		Usage: 
-		T4Utils.console('log','Hello from console');
-		T4Utils.console('warn','warning from console');
-		
-		ToDo: write objects to the console... 
+	/* Console utils for debugging. Don't leave these in your layouts.. 
+		T4Utils.console.log("log message");
+		T4Utils.console.warn("warning");
+		T4Utils.console.error("error message");
+		T4Utils.console('<console method>', '<message>');
 	*/
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string")			
@@ -125,16 +125,30 @@ var T4Utils = (function (utils) {
     };
    	
   
-  //outputs the directory from "section" in a string format
+	//outputs the directory from "section" in a string format
    	utils.getSectionInfo.getDirectory = function(section) {
       	return PathBuilder.getDirectory(section, publishCache, language).toString();		
     }
+	
+	/* 
+    	This is an adaptation of the CachedSection.GetChildren method in the API. 		
+        There is an issue where section.getChildren() does not output the sections in order they are listed in the siteManager.
+        This method will output the expected order in the site manager.
+        if is isHiddenInNAV is true then it will NOT output hidden sections.
+	*/
+	utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
+      	if (isHiddenInNAV === undefined) {
+      		isHiddenInNAV = false;
+        }
+		return section.getChildren(publishCache.channel, language, isHiddenInNAV);
+	}
     
-  /*
-  	GetRootPath(section, path)
-    Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
-    Returns an array of sections until root. Including the current section.    
-  */
+    
+	/*
+		GetRootPath(section, path)
+		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
+		Returns an array of sections until root. Including the current section.    
+	*/
     utils.getSectionInfo.getRootPath = function (nextNode, path) {             
       path = path || []; //if the path is empty create on e
       path.push(nextNode);  //add the next node
@@ -156,33 +170,30 @@ function getSectionChildrenAndGrandChildren(t4section) {
   };
   
   //T4Utils.write("Getting children");
-  var sectionChildren = t4section.getChildren(); //get the children object
-  var sectionChild = sectionChildren.length; //counter for the while loop
-  while(sectionChild--) 
+  
+  var sectionChildren = T4Utils.getSectionInfo.getChildren(t4section, true); //Added in 0.14. This will display the correct order of navlinks, and not show hidden links as well!
+  //var sectionChildren = t4section.getChildren(); //get the children object
+  //var sectionChild = sectionChildren.length; //counter for the while loop
+  for(sectionChild = 0; sectionChild < sectionChildren.length; sectionChild++)
   {
       var childsection = sectionChildren[sectionChild]; //cache the child section
+      var child = new _mysection();
+      child.name = T4Utils.getSectionInfo.sectionTitle(childsection);
+      child.link = T4Utils.getSectionInfo.sectionLink(childsection);
       
-      if(childsection.isVisibleInNavigation())
-      {  
-        var child = new _mysection();
-        child.name = T4Utils.getSectionInfo.sectionTitle(childsection);
-        child.link = T4Utils.getSectionInfo.sectionLink(childsection);
-      
-        //T4Utils.write("Added child " + T4Utils.getSectionInfo.sectionTitle(childsection));
-        var sectionGrandChildren = childsection.getChildren();    
-        var sectionGrandChild = sectionGrandChildren.length; //counter for the while loop
-        while(sectionGrandChild--)
-        {      
-          var grandchildsection = sectionGrandChildren[sectionGrandChild]; //cache the grandchild section
-          //T4Utils.write("Added grand child " + T4Utils.getSectionInfo.sectionTitle(grandchildsection));
-          if(grandchildsection.isVisibleInNavigation())
-          {  
-              child.children.push(grandchildsection);
-          }
+      //T4Utils.write("Added child " + T4Utils.getSectionInfo.sectionTitle(childsection));
+      var sectionGrandChildren =  T4Utils.getSectionInfo.getChildren(childsection, true);
+      for(sectionGrandChild = 0; sectionGrandChild < sectionGrandChildren.length; sectionGrandChild++)
+      {    	     
+        var grandchildsection = sectionGrandChildren[sectionGrandChild]; //cache the grandchild section
+        //T4Utils.write("Added grand child " + T4Utils.getSectionInfo.sectionTitle(grandchildsection));
+        if(grandchildsection.isVisibleInNavigation())
+        {  
+          child.children.push(grandchildsection);
         }
-        _mysections.push(child);
-      }   
-	}//end while
+      } //end for
+      _mysections.push(child);         
+	}//end for
   return _mysections;
 }
 
@@ -279,15 +290,49 @@ var addrightlinks = ('true' == content.get('Add sitelinks').publish()); //conver
 if(addrightlinks)
 {
   document.write("<ul class=\"nav navbar-nav navbar-right\">");
-  document.write("        <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Link<\/a><\/li>");
-  document.write("        <li class=\"dropdown\">");
-  document.write("          <a style=\"font-weight:200;color: #993CF3;\" href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Dropdown <span class=\"caret\"><\/span><\/a>");
+    document.write("        <li class=\"dropdown\">");
+  document.write("          <a style=\"font-weight:200;color: #993CF3;\" href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Faculty + Staff <span class=\"caret\"><\/span><\/a>");
   document.write("          <ul class=\"dropdown-menu\">");
-  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Action<\/a><\/li>");
-  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Another action<\/a><\/li>");
-  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Something else here<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Preceptors<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Resources<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">IT<\/a><\/li>");
   document.write("            <li role=\"separator\" class=\"divider\"><\/li>");
-  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Separated link<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">DOX<\/a><\/li>");
+  document.write("          <\/ul>");
+  document.write("        <\/li>");
+  
+  document.write("        <li class=\"dropdown\">");
+  document.write("          <a style=\"font-weight:200;color: #993CF3;\" href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Alumni <span class=\"caret\"><\/span><\/a>");
+  document.write("          <ul class=\"dropdown-menu\">");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Homecoming 2015<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Events<\/a><\/li>");
+  
+  document.write("          <\/ul>");
+  document.write("        <\/li>");
+  
+  
+  document.write("        <li class=\"dropdown\">");
+  document.write("          <a style=\"font-weight:200;color: #993CF3;\" href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">News <span class=\"caret\"><\/span><\/a>");
+  document.write("          <ul class=\"dropdown-menu\">");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Magazine<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Calendars<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Events<\/a><\/li>");
+  document.write("          <\/ul>");
+  document.write("        <\/li>");
+  
+  document.write("        <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Giving<\/a><\/li>");
+  
+  
+  
+  
+  document.write("        <li class=\"dropdown\">");
+  document.write("          <a style=\"font-weight:200;color: #993CF3;\" href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Students <span class=\"caret\"><\/span><\/a>");
+  document.write("          <ul class=\"dropdown-menu\">");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">New/Admitted<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">Organizations<\/a><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">LRC<\/a><\/li>");
+  document.write("            <li role=\"separator\" class=\"divider\"><\/li>");
+  document.write("            <li><a style=\"font-weight:200;color: #993CF3;\" href=\"#\">International<\/a><\/li>");
   document.write("          <\/ul>");
   document.write("        <\/li>");
   document.write("      <\/ul>");  
