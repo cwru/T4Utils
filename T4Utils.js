@@ -14,6 +14,8 @@
 	7/8/2015	Added newline chars for pretty printing of console and write methods
 				Added utils.siteManager.javaVersion
 	7/20/2015	Added utils.getSectionInfo.getChildren(section, isHiddenInNAV)  
+	8/13/2015	Added utils.getSectionInfo.getLevel(section)
+				Added utils.toString(obj) 
 	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
@@ -28,16 +30,23 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.14.0 7/20/15
+	Version 0.15.1 8/13/15
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
+
+/* Notes:
+	There are several varibles you can use:
+	publishCache.channel - returns the current channel?
+	
+*/
+
 
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.14.0';	
+	utils.version = 'v0.15.0';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -58,7 +67,7 @@ var T4Utils = (function (utils) {
 			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
 	};
 	utils.console.error = function(textOrObj) {		
-		if(typeof textOrObj === "string")			
+		if(typeof textOrObj === "string")
 			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
 	};
 	
@@ -67,6 +76,15 @@ var T4Utils = (function (utils) {
       document.write("<p>" + text + "</p>\n");
     };
     
+	
+	/*converts and object to string. 
+	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will
+		not convert that to a javascript string. This will convert to a string. grumble.
+	*/
+	utils.toString = function(object)
+	{
+		return String(object); 
+	}
 	/* 
 		sitemanager namespace gets information about the sitemanager 	
 	*/
@@ -176,7 +194,16 @@ var T4Utils = (function (utils) {
       var parentnode = nextNode.getParent();  //get the next node.    
       if (parentnode !== null) return this.getRootPath(parentnode, path); //if the next node is not nothing, get the next node and repeat until nothing. 
       else return path;  //when all the nodes have been gotten return the path. 
-    };    
-  
+    }   
+	
+	/*
+		getLevel(section)
+		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
+		Returns an int of the level of which the section is at.     
+	*/
+	utils.getSectionInfo.getLevel = function (section) {
+		return section.getLevel(publishCache.channel);
+	}
+	
     return utils; //return out of the module 
 })(T4Utils || {});
