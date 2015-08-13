@@ -46,7 +46,7 @@ importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder clas
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.15.0';	
+	utils.version = 'v0.15.1';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -57,24 +57,24 @@ var T4Utils = (function (utils) {
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string")			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
-	};
+	}
 	utils.console.log = function(textOrObj) {		
 		if(typeof textOrObj === "string")			
 			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
-	};
+	}
 	utils.console.warn = function(textOrObj) {		
 		if(typeof textOrObj === "string")			
 			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
-	};
+	}
 	utils.console.error = function(textOrObj) {		
 		if(typeof textOrObj === "string")
 			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
-	};
+	}
 	
     utils.write = function(text)
     {
       document.write("<p>" + text + "</p>\n");
-    };
+    }
     
 	
 	/*converts and object to string. 
@@ -101,7 +101,7 @@ var T4Utils = (function (utils) {
 	utils.brokerUtils.processT4Tag = function (t4Tag) {
 		var myContent = content || null; 
 		return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
-	};
+	}
 	/*
 	  contentInfo namespace gets information about content	
 		note: in layouts content will be null.
@@ -136,23 +136,23 @@ var T4Utils = (function (utils) {
   	//getPublishLink will return the publishing Link 
     utils.getSectionInfo.getPublishLink = function () {
         return this.publishLink;
-    };
+    }
     //sets the publishlink object
     utils.getSectionInfo.setPublishLink = function (section) {
         this.publishLink = PathBuilder.getLink(dbStatement, section, publishCache, language, isPreview); //cache the call         
-    };
+    }
     
   	//gets the section title for the section passed in
     utils.getSectionInfo.sectionTitle = function (section) {
         this.setPublishLink(section);
         return this.publishLink.getText();
-    };
+    }
   
   	//gets the url for the section passed in
     utils.getSectionInfo.sectionLink = function (section) {
         this.setPublishLink(section);
         return this.publishLink.getLink();
-    };
+    }
   
   	//returns a fully formed anchor link for the section passed in
     utils.getSectionInfo.anchorLink = function (section) {
@@ -161,7 +161,7 @@ var T4Utils = (function (utils) {
         var theText = this.publishLink.getText();
         var myLink = '<a href="' + theLink + '">' + theText + '</a>';
         return myLink;
-    };
+    }
    	
   
 	//outputs the directory from "section" in a string format
