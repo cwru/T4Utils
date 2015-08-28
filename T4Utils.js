@@ -37,8 +37,28 @@
 
 /* Notes:
 	There are several varibles you can use:
-	publishCache.channel - returns the current channel?
+		
+	document: The output stream writer. This is critical if the script wants to write output to the appropriate location during publish. For example, during publish the output writer would either be writing directly to a publish file on disk, or writing to a String which in turn, would be written to a file on disk.
 	
+	publishCache: The name of the PublishCache object. publishCache.channel - returns the current channel?
+	
+	dbStatement: The name of the database Statement object used to talk to the database.
+	
+	section: The name of the CachedSection object. The section in question is the one being currently published.
+	
+	content: The name of the Content object which is being published.
+	
+	contentList: The name of the array of CachedContent objects which are required when a page layout is being processed. This is likely to be null in the case of content layouts.
+	
+	template: The name of the Template object which is required content layouts, where it represents the content-type/template of which the content is an instance of. This is likely to be null in the case of page layouts.
+	
+	templateFormat: The name of the TemplateFormat object which represents the content layout for the given content instance. This is likely to be null in the case of content layouts.
+	
+	language: The language version of the given publish or preview.
+	
+	isPreview: A flag indicating whether the processing is occurring under a preview or a publish.
+	
+	isStyleHeader: A flag indicating whether the data being processed in a page layout is header or footer text. Not applicable in the case of content layouts.	
 */
 
 
