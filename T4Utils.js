@@ -33,6 +33,10 @@
   	var internalLinkText = T4Utils.brokerUtils.processT4Tag('<t4 type="content" name="Internal Link" output="linktext" modifiers="medialibrary, nav_sections"  />');
 	
 	How do you get an image from the media library? Note the formatter. I had to change this from image/* to path/*.
+	 var elv = T4Utils.elementInfo.getElementValue('Source'); //Returns a t4tag 
+	  elv = elv.replace("image/*", "path/*"); //The t4 tag has the formatter = image versus just the source. So change it.
+	  var sauce = T4Utils.brokerUtils.processT4Tag(elv);  //Process the t4 tag. Similar to below.
+	OR
 	var sauce = T4Utils.brokerUtils.processT4Tag('<t4 type="media" id="156737" formatter="path/*"/>');
 */
 
