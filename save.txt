@@ -1,0 +1,257 @@
+
+<img src="http://placehold.it/100/100"
+     srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w">
+//https://community.terminalfour.com/forum/index.php?topic=124.15
+
+var image = content.get('Image');
+var imageID = image.getID();
+var imageManager = MediaManager.getManager();
+
+
+
+importPackage(java.lang);
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.sitemanager);
+importPackage(com.terminalfour.publish.utils);
+importPackage(com.terminalfour.media.utils)
+
+try {
+    var variantArray = [],
+        allWidths = [],
+        largestVariant,
+        smallestVariant,
+        mediumVariant;
+        
+    var thisMediaId = content.getID();
+    var mediaManager = MediaManager.getManager();
+    var variantIds = mediaManager.getMediaVariants (dbStatement.getConnection(), thisMediaId, language); 
+
+    //functions for returning the highest and lowest numbers in an array
+    Array.min = function( array ){
+        return Math.min.apply( Math, array );
+    };
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+
+    //functions to get dimensions of images
+    function getImageWidth(mediaObj){
+        return MediaUtils.getImageDimensions(mediaObj)[0];
+    }
+    function getImageHeight(mediaObj){
+        return MediaUtils.getImageDimensions(mediaObj)[1];
+    }
+
+    //create a more user friendly version of the media object, exposing the width & path & output it to neccesary arrays
+    function createAndAddMediaObject(mediaObj){
+        var currentMediaWidth = getImageWidth(mediaObj);
+        var currentMediaHeight = getImageHeight(mediaObj);
+        var curentMediaID = mediaObj.getID();
+        var currentPath = BrokerUtils.processT4Tags (dbStatement, publishCache, section, content, language, isPreview, '<t4 type="media" id="'+curentMediaID+'" formatter="path/*" />');      
+        var originalObject = {
+                    varDimensions: currentMediaWidth + ' x ' + currentMediaHeight,
+                    widthNumber: currentMediaWidth,
+                    path: currentPath,
+                    imageID: curentMediaID
+        };
+        variantArray.push(originalObject);
+        allWidths.push(originalObject.widthNumber);
+        return originalObject;
+    }
+
+    //we aso need to include the default image as an option when deciding what images to use.
+    var currentMediaObject = mediaManager.get(dbStatement.getConnection(), thisMediaId, language);
+    
+    createAndAddMediaObject(currentMediaObject);
+ 
+    var imageDescription = currentMediaObject.description;
+
+     if(variantIds.length > 0){
+
+        //loop through all variants of this piece of media
+        for each(var variantId in variantIds ) {
+            var variant = mediaManager.get(dbStatement.getConnection(), variantId, language);
+            createAndAddMediaObject(variant);
+        }//end for loop
+
+     }
+
+    //get the widths array down to just unique widths, this gives us a smaller number to check through and some decisionsneed to be based off the length of this later
+    var uniq = allWidths.slice() // slice makes copy of array before sorting it
+              .sort(function(a,b){
+                return a - b;
+              })
+              .reduce(function(a,b){
+                if (a.slice(-1)[0] !== b) a.push(b); // slice(-1)[0] means last item in array without removing it (like .pop())
+                return a;
+              },[]); // this empty array becomes the starting value for a
+
+
+    //get the smallest and largest sizes of widths of the variants
+    var minimum = Array.min(uniq);
+    var maximum = Array.max(uniq);
+
+    //get an average number of all widths so we can find a middle width
+    var sum = uniq.reduce(function(a, b) {
+        return a + b;
+    });
+    var avg = Math.round(sum / uniq.length); //the average number of all the widths in the array
+
+    //this returns the element in the array that is closest the the average number in the array    
+    var closest = uniq.reduce(function (prev, curr) {
+      return (Math.abs(curr - avg) < Math.abs(prev - avg) ? curr : prev);
+    });
+
+
+  if(uniq.length > 1){
+
+        //run through all variant objects and pick out the biggest,smallest and the middle-most one and assign their paths for use
+        for(i=0; i<variantArray.length; i++){
+                var thisVariant = variantArray[i];
+                var thisVariantsWidth = thisVariant.widthNumber;
+
+                switch(thisVariantsWidth){
+                    case maximum:
+                        largestVariant = thisVariant;
+                        break;
+                    case minimum:
+                        smallestVariant = thisVariant;
+                        break; 
+                    case closest:
+                        mediumVariant = thisVariant;
+                        break; 
+                    default:
+                    //document.write('none of the above');
+                }
+        } //end for loop
+
+        if(uniq.length == 2){ //if theres only 2 you won't have a medium variant
+            document.write('<img src="' + smallestVariant.path + '" srcset="' + largestVariant.path + ' 2000w" alt="'+imageDescription+'">');   
+        }
+        else {
+             //create the new element with the variants
+            document.write('<img src="' + smallestVariant.path + '" srcset="' + mediumVariant.path + ' 1000w, ' + largestVariant.path + ' 2000w" alt="'+imageDescription+'">'); 
+        }
+
+
+    } //end if statement
+    else{
+        //otherwise if there are no variants just create a normal image tag
+        document.write('<img src="' + variantArray[0].path + '" alt="'+imageDescription+'">');
+    }
+
+
+}
+catch(err){
+document.write(err);
+}
+
+
+
+
+
+
+
+/* 
+	Experimental Image Writer    
+    By Ben Margevicius bdm4@case.edu
+	9/17/2015
+    V0.1 initial.
+    
+    Write images from the media library based on the viewport.    
+    Expected output:
+    
+    <img src="http://placehold.it/100/100"
+     	 srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w">
+         
+    https://community.terminalfour.com/forum/index.php?topic=124.15
+    
+    Note our break points are 1232px, 768px, and 480px;
+    
+    If you want more you can also do:
+
+<img src="http://placehold.it/100/100"
+     srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w"
+     sizes="
+         (min-width: 768px) 50vw 100vw,
+         (min-width: 1200px) 33vw">
+         
+         Where the image will be 33% of the viewport on screens > 1200px
+         50% on screens
+         and 100% on small screens?
+                  
+         Bootstrap breakpoints:
+         768, 992, 1200.
+         
+*/
+
+try {
+  importClass(com.terminalfour.publish.utils.BrokerUtils);
+  var utils = eval(String (com.terminalfour.publish.utils.BrokerUtils.processT4Tags (dbStatement, publishCache, section, null, language, isPreview, '<t4 type="media" id="123627" formatter="inline/*"/>')));
+} catch (e) {
+    if (e instanceof SyntaxError) {
+        document.write(e.message);
+    } else {
+        throw( e );
+    }
+}
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.media.utils);
+
+T4Utils.media = T4Utils.media || {};
+T4Utils.elementInfo.getElementID = function(element) 
+{
+  var c = content || null; 
+  if(c !== null)
+    return c.get(element).getID();		
+}
+
+
+T4Utils.media.getImageVariantsIds = function(ImageElement) {
+  	var imageID = content.get(ImageElement).getID();
+  	var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+  	return variantIds;
+}
+
+T4Utils.media.getImageDimensions = function(mediaObj) { 
+  var d = { width: 0, height: 0 };
+  d.width = MediaUtils.getImageDimensions(mediaObj)[0];
+  d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+  return d;  	
+}
+
+T4Utils.media.getMediaObject = function(mediaID) {
+  	return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+}
+
+try
+{   
+  	var myid = T4Utils.elementInfo.getElementID("Image1");
+  	T4Utils.write("sauce: " + String(myid));
+  	//<t4 type="media" id="199373" formatter="image/*"/>
+  	var currentMediaObject = T4Utils.media.getMediaObject(myid);
+  	var dimensions = T4Utils.media.getImageDimensions(currentMediaObject);
+  	T4Utils.write(dimensions.width + " x " + dimensions.height);
+  
+  	var variants = T4Utils.media.getImageVariantsIds("Image1");
+  	for(i = 0; i < variants.length; i++)
+    {
+      	T4Utils.write("variant: " + String(variants[i]));
+      	var currentMediaObject = T4Utils.media.getMediaObject(variants[i]);
+  		var dimensions = T4Utils.media.getImageDimensions(currentMediaObject);
+  		T4Utils.write(dimensions.width + " x " + dimensions.height);
+    }
+}
+catch(err)
+{
+  	document.write(err.message);
+}
