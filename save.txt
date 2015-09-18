@@ -1,0 +1,658 @@
+
+<img src="http://placehold.it/100/100"
+     srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w">
+//https://community.terminalfour.com/forum/index.php?topic=124.15
+
+var image = content.get('Image');
+var imageID = image.getID();
+var imageManager = MediaManager.getManager();
+
+
+
+importPackage(java.lang);
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.sitemanager);
+importPackage(com.terminalfour.publish.utils);
+importPackage(com.terminalfour.media.utils)
+
+try {
+    var variantArray = [],
+        allWidths = [],
+        largestVariant,
+        smallestVariant,
+        mediumVariant;
+        
+    var thisMediaId = content.getID();
+    var mediaManager = MediaManager.getManager();
+    var variantIds = mediaManager.getMediaVariants (dbStatement.getConnection(), thisMediaId, language); 
+
+    //functions for returning the highest and lowest numbers in an array
+    Array.min = function( array ){
+        return Math.min.apply( Math, array );
+    };
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+
+    //functions to get dimensions of images
+    function getImageWidth(mediaObj){
+        return MediaUtils.getImageDimensions(mediaObj)[0];
+    }
+    function getImageHeight(mediaObj){
+        return MediaUtils.getImageDimensions(mediaObj)[1];
+    }
+
+    //create a more user friendly version of the media object, exposing the width & path & output it to neccesary arrays
+    function createAndAddMediaObject(mediaObj){
+        var currentMediaWidth = getImageWidth(mediaObj);
+        var currentMediaHeight = getImageHeight(mediaObj);
+        var curentMediaID = mediaObj.getID();
+        var currentPath = BrokerUtils.processT4Tags (dbStatement, publishCache, section, content, language, isPreview, '<t4 type="media" id="'+curentMediaID+'" formatter="path/*" />');      
+        var originalObject = {
+                    varDimensions: currentMediaWidth + ' x ' + currentMediaHeight,
+                    widthNumber: currentMediaWidth,
+                    path: currentPath,
+                    imageID: curentMediaID
+        };
+        variantArray.push(originalObject);
+        allWidths.push(originalObject.widthNumber);
+        return originalObject;
+    }
+
+    //we aso need to include the default image as an option when deciding what images to use.
+    var currentMediaObject = mediaManager.get(dbStatement.getConnection(), thisMediaId, language);
+    
+    createAndAddMediaObject(currentMediaObject);
+ 
+    var imageDescription = currentMediaObject.description;
+
+     if(variantIds.length > 0){
+
+        //loop through all variants of this piece of media
+        for each(var variantId in variantIds ) {
+            var variant = mediaManager.get(dbStatement.getConnection(), variantId, language);
+            createAndAddMediaObject(variant);
+        }//end for loop
+
+     }
+
+    //get the widths array down to just unique widths, this gives us a smaller number to check through and some decisionsneed to be based off the length of this later
+    var uniq = allWidths.slice() // slice makes copy of array before sorting it
+              .sort(function(a,b){
+                return a - b;
+              })
+              .reduce(function(a,b){
+                if (a.slice(-1)[0] !== b) a.push(b); // slice(-1)[0] means last item in array without removing it (like .pop())
+                return a;
+              },[]); // this empty array becomes the starting value for a
+
+
+    //get the smallest and largest sizes of widths of the variants
+    var minimum = Array.min(uniq);
+    var maximum = Array.max(uniq);
+
+    //get an average number of all widths so we can find a middle width
+    var sum = uniq.reduce(function(a, b) {
+        return a + b;
+    });
+    var avg = Math.round(sum / uniq.length); //the average number of all the widths in the array
+
+    //this returns the element in the array that is closest the the average number in the array    
+    var closest = uniq.reduce(function (prev, curr) {
+      return (Math.abs(curr - avg) < Math.abs(prev - avg) ? curr : prev);
+    });
+
+
+  if(uniq.length > 1){
+
+        //run through all variant objects and pick out the biggest,smallest and the middle-most one and assign their paths for use
+        for(i=0; i<variantArray.length; i++){
+                var thisVariant = variantArray[i];
+                var thisVariantsWidth = thisVariant.widthNumber;
+
+                switch(thisVariantsWidth){
+                    case maximum:
+                        largestVariant = thisVariant;
+                        break;
+                    case minimum:
+                        smallestVariant = thisVariant;
+                        break; 
+                    case closest:
+                        mediumVariant = thisVariant;
+                        break; 
+                    default:
+                    //document.write('none of the above');
+                }
+        } //end for loop
+
+        if(uniq.length == 2){ //if theres only 2 you won't have a medium variant
+            document.write('<img src="' + smallestVariant.path + '" srcset="' + largestVariant.path + ' 2000w" alt="'+imageDescription+'">');   
+        }
+        else {
+             //create the new element with the variants
+            document.write('<img src="' + smallestVariant.path + '" srcset="' + mediumVariant.path + ' 1000w, ' + largestVariant.path + ' 2000w" alt="'+imageDescription+'">'); 
+        }
+
+
+    } //end if statement
+    else{
+        //otherwise if there are no variants just create a normal image tag
+        document.write('<img src="' + variantArray[0].path + '" alt="'+imageDescription+'">');
+    }
+
+
+}
+catch(err){
+document.write(err);
+}
+
+
+
+
+
+
+
+/* 
+	Experimental Image Writer    
+    By Ben Margevicius bdm4@case.edu
+	9/17/2015
+    V0.1 initial.
+    
+    Write images from the media library based on the viewport.    
+    Expected output:
+    
+    <img src="http://placehold.it/100/100"
+     	 srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w">
+         
+    https://community.terminalfour.com/forum/index.php?topic=124.15
+    
+    Note our break points are 1232px, 768px, and 480px;
+    
+    If you want more you can also do:
+
+<img src="http://placehold.it/100/100"
+     srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w"
+     sizes="
+         (min-width: 768px) 50vw 100vw,
+         (min-width: 1200px) 33vw">
+         
+         Where the image will be 33% of the viewport on screens > 1200px
+         50% on screens
+         and 100% on small screens?
+                  
+         Bootstrap breakpoints:
+         768, 992, 1200.
+         
+*/
+
+try {
+  importClass(com.terminalfour.publish.utils.BrokerUtils);
+  var utils = eval(String (com.terminalfour.publish.utils.BrokerUtils.processT4Tags (dbStatement, publishCache, section, null, language, isPreview, '<t4 type="media" id="123627" formatter="inline/*"/>')));
+} catch (e) {
+    if (e instanceof SyntaxError) {
+        document.write(e.message);
+    } else {
+        throw( e );
+    }
+}
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.media.utils);
+
+T4Utils.media = T4Utils.media || {};
+T4Utils.elementInfo.getElementID = function(element) 
+{
+  var c = content || null; 
+  if(c !== null)
+    return c.get(element).getID();		
+}
+
+
+T4Utils.media.getImageVariantsIds = function(ImageElement) {
+  	var imageID = content.get(ImageElement).getID();
+  	var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+  	return variantIds;
+}
+
+T4Utils.media.getImageDimensions = function(mediaObj) { 
+  var d = { width: 0, height: 0 };
+  d.width = MediaUtils.getImageDimensions(mediaObj)[0];
+  d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+  return d;  	
+}
+
+T4Utils.media.getMediaObject = function(mediaID) {
+  	return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+}
+
+try
+{   
+  	var myid = T4Utils.elementInfo.getElementID("Image1");
+  	T4Utils.write("sauce: " + String(myid));
+  	//<t4 type="media" id="199373" formatter="image/*"/>
+  	var currentMediaObject = T4Utils.media.getMediaObject(myid);
+  	var dimensions = T4Utils.media.getImageDimensions(currentMediaObject);
+  	T4Utils.write(dimensions.width + " x " + dimensions.height);
+  
+  	var variants = T4Utils.media.getImageVariantsIds("Image1");
+  	for(i = 0; i < variants.length; i++)
+    {
+      	T4Utils.write("variant: " + String(variants[i]));
+      	var currentMediaObject = T4Utils.media.getMediaObject(variants[i]);
+  		var dimensions = T4Utils.media.getImageDimensions(currentMediaObject);
+  		T4Utils.write(dimensions.width + " x " + dimensions.height);
+    }
+}
+catch(err)
+{
+  	document.write(err.message);
+}
+
+
+
+
+
+
+/*  Versioning    
+	6/24/2015 - Initial
+	6/30/2015 - Added stuff from T4's javascript util (https://community.terminalfour.com/forum/index.php?topic=426.0)
+				Added utils.version;
+				Added utils.siteManager namespace 
+				Added utils.siteManager.version, and utils.siteManager.buildDetails;
+				Added utils.brokerUtils namespace
+				Added utils.brokerUtils.processT4Tags
+	7/1/2015	Added utils.console(method, textOrObj) used to write debugging statements to the console.
+	7/2/2015 	Added utils.elementInfo namspace to return info about elements 
+				Added utils.elementInfo.getElements to return an array of elements
+				Added utils.elementInfo.getElementValue(element) to return the value of an element. 
+	7/6/2015	Added utils.elementInfo.getElementName(element).
+	7/8/2015	Added newline chars for pretty printing of console and write methods
+				Added utils.siteManager.javaVersion
+	7/20/2015	Added utils.getSectionInfo.getChildren(section, isHiddenInNAV)  
+	8/13/2015	Added utils.getSectionInfo.getLevel(section)
+				Added utils.toString(obj) 
+	9/17/2015	Added utils.elementInfo.getElementID(element) Returns the id of an element.
+				Added utils.media namspace to give some help with images
+						utils.media.getMediaObject(int id)
+						utils.media.getImageDimensions(mediaobj media)
+						utils.media.getImageVariantsIds(string mediaElement). 
+	Usage:
+	1) Add a content type, modify the content layout, paste this at the top of your layout. 
+	2) Your code will go below the T4Utils Object
+	
+	Examples:
+	T4Utils.write("Some text"); 
+	var sectionTitle = T4Utils.getSectionInfo.sectionTitle(section);
+	var pathToRootArray = T4Utils.getSectionInfo.getRootPath(section);
+	
+	
+	How to get url and text from a section link type. You can output 'normal' to get the whole link as well.
+	var internalLink = T4Utils.brokerUtils.processT4Tag('<t4 type="content" name="Internal Link" output="linkurl" modifiers="medialibrary, nav_sections"  />');
+	
+  	var internalLinkText = T4Utils.brokerUtils.processT4Tag('<t4 type="content" name="Internal Link" output="linktext" modifiers="medialibrary, nav_sections"  />');
+	
+	How do you get an image from the media library? Note the formatter. I had to change this from image/* to path/*.
+	 var elv = T4Utils.elementInfo.getElementValue('Source'); //Returns a t4tag 
+	  elv = elv.replace("image/*", "path/*"); //The t4 tag has the formatter = image versus just the source. So change it.
+	  var sauce = T4Utils.brokerUtils.processT4Tag(elv);  //Process the t4 tag. Similar to below.
+	OR
+	var sauce = T4Utils.brokerUtils.processT4Tag('<t4 type="media" id="156737" formatter="path/*"/>');
+*/
+
+/* 
+	Utility Javascript for T4 Javascript Content Processor
+   	Ben Margevicius; bdm4@case.edu
+	Version 0.16 9/17/15
+   
+	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
+*/
+
+/* Notes:
+	There are several varibles you can use:
+		
+	document: The output stream writer. This is critical if the script wants to write output to the appropriate location during publish. For example, during publish the output writer would either be writing directly to a publish file on disk, or writing to a String which in turn, would be written to a file on disk.
+	
+	publishCache: The name of the PublishCache object. publishCache.channel - returns the current channel?
+	
+	dbStatement: The name of the database Statement object used to talk to the database.
+	
+	section: The name of the CachedSection object. The section in question is the one being currently published.
+	
+	content: The name of the Content object which is being published.
+	
+	contentList: The name of the array of CachedContent objects which are required when a page layout is being processed. This is likely to be null in the case of content layouts.
+	
+	template: The name of the Template object which is required content layouts, where it represents the content-type/template of which the content is an instance of. This is likely to be null in the case of page layouts.
+	
+	templateFormat: The name of the TemplateFormat object which represents the content layout for the given content instance. This is likely to be null in the case of content layouts.
+	
+	language: The language version of the given publish or preview.
+	
+	isPreview: A flag indicating whether the processing is occurring under a preview or a publish.
+	
+	isStyleHeader: A flag indicating whether the data being processed in a page layout is header or footer text. Not applicable in the case of content layouts.	
+*/
+
+
+importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.media.utils);
+
+//IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
+var T4Utils = (function (utils) {  	
+	utils.version = 'v0.16';	
+	
+	/* Console utils for debugging. Don't leave these in your layouts.. 
+		T4Utils.console.log("log message");
+		T4Utils.console.warn("warning");
+		T4Utils.console.error("error message");
+		T4Utils.console('<console method>', '<message>');
+	*/
+	utils.console = function(consoleMethod, textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
+	}
+	utils.console.log = function(textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
+	}
+	utils.console.warn = function(textOrObj) {		
+		if(typeof textOrObj === "string")			
+			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
+	}
+	utils.console.error = function(textOrObj) {		
+		if(typeof textOrObj === "string")
+			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
+	}
+	
+    utils.write = function(text)
+    {
+      document.write("<p>" + text + "</p>\n");
+    }
+    
+	
+	/*converts and object to string. 
+	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will
+		not convert that to a javascript string. This will convert to a string. grumble.
+	*/
+	utils.toString = function(object)
+	{
+		return String(object); 
+	}
+	/* 
+		sitemanager namespace gets information about the sitemanager 	
+	*/
+	utils.siteManager = utils.siteManager || {};
+	//write the version of T4 you are working with.
+	utils.siteManager.version = com.terminalfour.sitemanager.SiteManagerVersion.version;	
+	utils.siteManager.buildDetails = com.terminalfour.sitemanager.SiteManagerVersion.buildDetails;
+	utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
+	/* 
+		BrokerUtils NameSpace does something. I dunno yet.. I'll have to read the API :) 
+	
+	*/
+	utils.brokerUtils = utils.brokerUtils || {};
+	utils.brokerUtils.processT4Tag = function (t4Tag) {
+		var myContent = content || null; 
+		return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
+	}
+	/*
+	  contentInfo namespace gets information about content	
+		note: in layouts content will be null.
+	*/
+	utils.elementInfo = utils.elementInfo || {};	
+	utils.elementInfo.getElements = function() {
+		var c = content || null;
+		if(c !== null)
+			c.getElements();	
+	}
+	utils.elementInfo.getElementValue = function(elementName) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(elementName).publish();		
+	}	
+	utils.elementInfo.getElementName = function(element) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(element).getName();		
+	}
+	utils.elementInfo.getElementID = function(element) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(element).getID();		
+	}	
+	
+    /* 
+	
+		getSectionInfo namespace gets 
+       information about a section. duh.       
+    */
+    utils.getSectionInfo = utils.getSectionInfo || {};
+  	//getPublishLink will return the publishing Link 
+    utils.getSectionInfo.getPublishLink = function () {
+        return this.publishLink;
+    }
+    //sets the publishlink object
+    utils.getSectionInfo.setPublishLink = function (section) {
+        this.publishLink = PathBuilder.getLink(dbStatement, section, publishCache, language, isPreview); //cache the call         
+    }
+    
+  	//gets the section title for the section passed in
+    utils.getSectionInfo.sectionTitle = function (section) {
+        this.setPublishLink(section);
+        return this.publishLink.getText();
+    }
+  
+  	//gets the url for the section passed in
+    utils.getSectionInfo.sectionLink = function (section) {
+        this.setPublishLink(section);
+        return this.publishLink.getLink();
+    }
+  
+  	//returns a fully formed anchor link for the section passed in
+    utils.getSectionInfo.anchorLink = function (section) {
+        this.setPublishLink(section);
+        var theLink = this.publishLink.getLink();
+        var theText = this.publishLink.getText();
+        var myLink = '<a href="' + theLink + '">' + theText + '</a>';
+        return myLink;
+    }
+   	
+  
+	//outputs the directory from "section" in a string format
+   	utils.getSectionInfo.getDirectory = function(section) {
+      	return PathBuilder.getDirectory(section, publishCache, language).toString();		
+    }
+	
+	/* 
+    	This is an adaptation of the CachedSection.GetChildren method in the API. 		
+        There is an issue where section.getChildren() does not output the sections in order they are listed in the siteManager.
+        This method will output the expected order in the site manager.
+        if is isHiddenInNAV is true then it will NOT output hidden sections.
+	*/
+	utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
+      	if (isHiddenInNAV === undefined) {
+      		isHiddenInNAV = false;
+        }
+		return section.getChildren(publishCache.channel, language, isHiddenInNAV);
+	}
+    
+    
+	/*
+		GetRootPath(section, path)
+		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
+		Returns an array of sections until root. Including the current section.    
+	*/
+    utils.getSectionInfo.getRootPath = function (nextNode, path) {             
+      path = path || []; //if the path is empty create on e
+      path.push(nextNode);  //add the next node
+      var parentnode = nextNode.getParent();  //get the next node.    
+      if (parentnode !== null) return this.getRootPath(parentnode, path); //if the next node is not nothing, get the next node and repeat until nothing. 
+      else return path;  //when all the nodes have been gotten return the path. 
+    }   
+	
+	/*
+		getLevel(section)
+		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
+		Returns an int of the level of which the section is at.     
+	*/
+	utils.getSectionInfo.getLevel = function (section) {
+		return section.getLevel(publishCache.channel);
+	}
+	
+	/*
+		MEDIA Helpers
+		Works with media objects from the media library
+	*/
+	T4Utils.media = T4Utils.media || {};
+	/*
+		Gets an array of image variantids 
+		Pass is the Media Element from the site manager. 
+		This will return an array of int ids
+	*/	
+	T4Utils.media.getImageVariantsIds = function(mediaElement) {
+		var imageID = content.get(mediaElement).getID();
+		var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+		return variantIds;
+	}
+	/*
+		Use getMediaObect to get the media object. Pass that in here to get the dimensions of that media. 
+		Probably should check to see if it's an image or not.
+		Returns an object that has height and width. 
+	*/
+	T4Utils.media.getImageDimensions = function(mediaObj) { 
+		var d = { width: 0, height: 0 };
+		d.width = MediaUtils.getImageDimensions(mediaObj)[0];
+		d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+		return d;  	
+	}
+	/*
+		Returns a media object from the ID. Note this is not the same as the media element
+	*/
+	T4Utils.media.getMediaObject = function(mediaID) {
+		return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+	}
+
+    return utils; //return out of the module 
+})(T4Utils || {});
+
+
+
+
+/**
+
+
+	
+	/*
+		MEDIA Helpers
+		Works with media objects from the media library
+	*/
+	T4Utils.media = T4Utils.media || {};
+	/*
+		Gets an array of image variantids 
+		Pass is the Media Element from the site manager. 
+		This will return an array of int ids
+	*/	
+	T4Utils.media.getImageVariantsIds = function(mediaElement) {
+		var imageID = content.get(mediaElement).getID();
+		var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+		return variantIds;
+	}
+	/*
+		Use getMediaObect to get the media object. Pass that in here to get the dimensions of that media. 
+		Probably should check to see if it's an image or not.
+		Returns an object that has height and width. 
+	*/
+	T4Utils.media.getImageDimensions = function(mediaObj) { 
+		var d = { width: 0, height: 0 };
+		d.width = MediaUtils.getImageDimensions(mediaObj)[0];
+		d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+		return d;  	
+	}
+	/*
+		Returns a media object from the ID. Note this is not the same as the media element
+	*/
+	T4Utils.media.getMediaObject = function(mediaID) {
+		return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+	}
+
+
+try
+{   
+  	var myid = T4Utils.elementInfo.getElementID("Image1");
+  	T4Utils.write("sauce: " + String(myid));
+  	//<t4 type="media" id="199373" formatter="image/*"/>
+  	
+  	var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of Media
+  	//var dimensions = T4Utils.media.getImageDimensions(sourceMediaObject); //get the dimensions of the Media object.
+  	//T4Utils.write(dimensions.width + " x " + dimensions.height);
+  	/*	This doesn't work? I am getting "" as the path. 
+  		var path = currentMediaObject.getRemotePath(); //Get the path
+  	*/
+  	//as a work around to get the path I'll wrap the id in a t4 tag and process that as a path. 
+  	var saucepath = T4Utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ myid +'" formatter="path/*"/>');
+  
+  	document.write("path: " + saucepath);	
+  
+  
+  	var variants = T4Utils.media.getImageVariantsIds("Image1");
+  	for(i = 0; i < variants.length; i++)
+    {
+      	T4Utils.write("variant: " + String(variants[i]));
+      	var currentMediaObject = T4Utils.media.getMediaObject(variants[i]);
+  		var dimensions = T4Utils.media.getImageDimensions(currentMediaObject);
+  		T4Utils.write(dimensions.width + " x " + dimensions.height);
+    }
+  	
+  	
+  	/*	Write this
+    	<img src="http://placehold.it/100/100"
+     	 srcset="
+         http://placehold.it/320/320 320w,
+         http://placehold.it/640/320 640w,
+         http://placehold.it/960/320 960w"> 
+         
+         <img src="https://webcms.case.edu/terminalfour/SiteManager?ctfn=download&amp;fnno=60&amp;ceid=1767492061" 
+         srcset="
+         https://webcms.case.edu/terminalfour/SiteManager?ctfn=download&amp;fnno=60&amp;ceid=1278162556 1232w, 
+         https://webcms.case.edu/terminalfour/SiteManager?ctfn=download&amp;fnno=60&amp;ceid=406936197 480w, 
+         https://webcms.case.edu/terminalfour/SiteManager?ctfn=download&amp;fnno=60&amp;ceid=1937892729 768w">
+         */
+  	  	
+  	
+    var imagesrc = '<img src="'+ saucepath + '"';
+  	
+  	var variantIDs = T4Utils.media.getImageVariantsIds("Image1");
+  	if(variantIDs.length)
+    {
+     	imagesrc += ' srcset="';
+      
+        for(i = 0; i < variantIDs.length; i++)
+        {
+            var variantObj = T4Utils.media.getMediaObject(variantIDs[i]); //Get the object from the id
+            var dimensions = T4Utils.media.getImageDimensions(variantObj); //get the dimensions of the image
+            var variantpath = T4Utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ variants[i] +'" formatter="path/*"/>'); //get the src path
+            imagesrc += variantpath + ' ' + dimensions.width + 'w, '; //concat our srcset tag. 
+        }
+     	
+      	imagesrc = imagesrc.slice(0, -2); //remove the trailing ', '
+      	imagesrc += '"';
+    }
+    imagesrc += ' />';   //cap our html element.
+  	document.write(imagesrc); //write it to the output stream.
+}
+catch(err)
+{
+  	document.write(err.message);
+}*/
