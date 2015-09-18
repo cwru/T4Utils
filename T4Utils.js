@@ -16,7 +16,10 @@
 	7/20/2015	Added utils.getSectionInfo.getChildren(section, isHiddenInNAV)  
 	8/13/2015	Added utils.getSectionInfo.getLevel(section)
 				Added utils.toString(obj) 
-	
+	9/18/2015	Added utils.elementInfo.getElementID (element) Returns the id of an element.
+				Added utils.media namspace to give some help with images utils.media.getMediaObject(int id)
+						utils.media.getImageDimensions(mediaobj media)
+						utils.media.getImageVariantsIds(string mediaElement).	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -42,7 +45,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.15.1 8/13/15
+	Version 0.17 9/18/15
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
@@ -78,7 +81,7 @@ importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder clas
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.15.1';	
+	utils.version = 'v0.17';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -157,6 +160,12 @@ var T4Utils = (function (utils) {
 		if(c !== null)
 			return c.get(element).getName();		
 	}
+	utils.elementInfo.getElementID = function(element) 
+	{
+		var c = content || null; 
+		if(c !== null)
+			return c.get(element).getID();		
+	}	
 		
 	
     /* 
