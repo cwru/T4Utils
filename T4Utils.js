@@ -17,7 +17,10 @@
 	8/13/2015	Added utils.getSectionInfo.getLevel(section)
 				Added utils.toString(obj) 
 	9/17/2015	Added utils.elementInfo.getElementID(element) Returns the id of an element.
-	
+				Added utils.media namspace to give some help with images
+						utils.media.getMediaObject(int id)
+						utils.media.getImageDimensions(mediaobj media)
+						utils.media.getImageVariantsIds(string mediaElement). 
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -77,6 +80,8 @@
 
 
 importClass(com.terminalfour.publish.PathBuilder); //import the pathbuilder class
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.media.utils);
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
@@ -163,8 +168,7 @@ var T4Utils = (function (utils) {
 		var c = content || null; 
 		if(c !== null)
 			return c.get(element).getID();		
-	}
-		
+	}	
 	
     /* 
 	
@@ -244,5 +248,38 @@ var T4Utils = (function (utils) {
 		return section.getLevel(publishCache.channel);
 	}
 	
+	/*
+		MEDIA Helpers
+		Works with media objects from the media library
+	*/
+	T4Utils.media = T4Utils.media || {};
+	/*
+		Gets an array of image variantids 
+		Pass is the Media Element from the site manager. 
+		This will return an array of int ids
+	*/	
+	T4Utils.media.getImageVariantsIds = function(mediaElement) {
+		var imageID = content.get(mediaElement).getID();
+		var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+		return variantIds;
+	}
+	/*
+		Use getMediaObect to get the media object. Pass that in here to get the dimensions of that media. 
+		Probably should check to see if it's an image or not.
+		Returns an object that has height and width. 
+	*/
+	T4Utils.media.getImageDimensions = function(mediaObj) { 
+		var d = { width: 0, height: 0 };
+		d.width = MediaUtils.getImageDimensions(mediaObj)[0];
+		d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+		return d;  	
+	}
+	/*
+		Returns a media object from the ID. Note this is not the same as the media element
+	*/
+	T4Utils.media.getMediaObject = function(mediaID) {
+		return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+	}
+
     return utils; //return out of the module 
 })(T4Utils || {});
