@@ -28,9 +28,8 @@
 	
 	
 	How to get url and text from a section link type. You can output 'normal' to get the whole link as well.
-	var internalLink = T4Utils.brokerUtils.processT4Tag('<t4 type="content" name="Internal Link" output="linkurl" modifiers="medialibrary, nav_sections"  />');
-	
-  	var internalLinkText = T4Utils.brokerUtils.processT4Tag('<t4 type="content" name="Internal Link" output="linktext" modifiers="medialibrary, nav_sections"  />');
+	var internalLink = T4Utils.brokerUtils.processT4Tag('<t4 ... output="linkurl" ...  />');	
+  	var internalLinkText = T4Utils.brokerUtils.processT4Tag('<t4 ... output="linktext" ... />');
 	
 	How do you get an image from the media library? Note the formatter. I had to change this from image/* to path/*.
 	 var elv = T4Utils.elementInfo.getElementValue('Source'); //Returns a t4tag 
