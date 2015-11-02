@@ -60,7 +60,7 @@
 	
 	dbStatement: The name of the database Statement object used to talk to the database.
 	
-	section: The name of the CachedSection object. The section in question is the one being currently published.
+	section: The name of the Section object. The section in question is the one being currently published.
 	
 	content: The name of the Content object which is being published.
 	
@@ -232,38 +232,47 @@ var T4Utils = (function (utils) {
 		Usage T4Utils.getSectionInfo.getRootPath(section); //section is predefined in t4 as the section you are in. 
 		Returns an array of sections until root. Including the current section.    
 	*/
-    utils.getSectionInfo.getRootPath = function (nextNode, path) {             
-      path = path || []; //if the path is empty create on e
-      path.push(nextNode);  //add the next node
-      var parentnode = nextNode.getParent();  //get the next node.    
-      if (parentnode !== null) return this.getRootPath(parentnode, path); //if the next node is not nothing, get the next node and repeat until nothing. 
-      else return path;  //when all the nodes have been gotten return the path. 
+    utils.getSectionInfo.getRootPath = function (currentSection) {             
+		return this.getPathUntilLevel(0, currentSection);
     }   
 	
 	/*
-		getPathUntilLevel(level, nextNode, path)
+		getPathUntilLevel(finalLevel, currentSection, path)
 		usage 
-		T4Utils.getSectionInfo.getPathUntil(0, section); //go until level 0, otherwise known as root. 
-		T4Utils.getSectionInfo.getPathUntil(2, section); //go until two levels up. 		
+		T4Utils.getSectionInfo.getPathUntilLevel(0, section); //go until level 0, otherwise known as root. 
+		T4Utils.getSectionInfo.getPathUntilLevel(2, section); //go until two levels up. 		
 		Gets a path from the current section until we get to a certain level. 
 	*/
-	utils.getSectionInfo.getPath = function(stepsUp, nextNode, path)
+	utils.getSectionInfo.getPathUntilLevel = function(finalLevel, currentSection, path)
 	{
-		path = path || []; //initialize an array
-		path.push(nextNode);
-		if(path.length < stepsUp) 
-		{
-			var parentnode = nextNode.getParent();  //get the next node.
-			if( parentnode === null ) return path; 
-			else return this.getPath(stepsUp, parentNode, path); //recurse up one level. 
+		path = path || []; //initialize an array		
+		path.push(currentSection);	
+		var currentLevel = currentSection.getLevel(publishCache.channel);		
+		if(finalLevel < currentLevel)
+		{				
+			var parentSection = currentSection.getParent();  //get the next node.
+			return this.getPathUntilLevel(finalLevel, parentSection, path); //recurse up one level. 
 		}
-		return path;
+		else return path;
 	}
 	
-	utils.getSectionInfo.getPathUntilSection = function(sectionName)
+	/*
+		getPathBySteps(stepsUp, currentSection, path)
+		usage 
+		T4Utils.getSectionInfo.getPathBySteps(1, section); //go 1 step back otherwise get the parent
+		Gets a path from the current section until we get to a certain level. 
+	*/
+	utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 	{
-		var level = 0;	
-		var parentname = parentnode.getName();	
+		path = path || []; //initialize an array
+		path.push(currentSection);
+		if(path.length < stepsUp) 
+		{
+			var parentSection = currentSection.getParent();  //get the next node.
+			if( parentSection === null ) return path; // break the recursion if we are at root.
+			else return this.getPathBySteps(stepsUp, parentSection, path); //recurse up one level. 
+		}
+		else return path;
 	}
 	
 	/*
