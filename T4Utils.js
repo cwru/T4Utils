@@ -20,6 +20,7 @@
 				Added utils.media namspace to give some help with images utils.media.getMediaObject(int id)
 						utils.media.getImageDimensions(mediaobj media)
 						utils.media.getImageVariantsIds(string mediaElement).	
+	11/2/2015	Added level to recurse to in 
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -45,7 +46,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.17 9/18/15
+	Version 0.18 11/2/15
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
@@ -83,7 +84,7 @@ importPackage(com.terminalfour.media.utils);
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.17';	
+	utils.version = 'v0.18';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -238,6 +239,32 @@ var T4Utils = (function (utils) {
       if (parentnode !== null) return this.getRootPath(parentnode, path); //if the next node is not nothing, get the next node and repeat until nothing. 
       else return path;  //when all the nodes have been gotten return the path. 
     }   
+	
+	/*
+		getPathUntilLevel(level, nextNode, path)
+		usage 
+		T4Utils.getSectionInfo.getPathUntil(0, section); //go until level 0, otherwise known as root. 
+		T4Utils.getSectionInfo.getPathUntil(2, section); //go until two levels up. 		
+		Gets a path from the current section until we get to a certain level. 
+	*/
+	utils.getSectionInfo.getPath = function(stepsUp, nextNode, path)
+	{
+		path = path || []; //initialize an array
+		path.push(nextNode);
+		if(path.length < stepsUp) 
+		{
+			var parentnode = nextNode.getParent();  //get the next node.
+			if( parentnode === null ) return path; 
+			else return this.getPath(stepsUp, parentNode, path); //recurse up one level. 
+		}
+		return path;
+	}
+	
+	utils.getSectionInfo.getPathUntilSection = function(sectionName)
+	{
+		var level = 0;	
+		var parentname = parentnode.getName();	
+	}
 	
 	/*
 		getLevel(section)
