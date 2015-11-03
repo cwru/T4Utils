@@ -20,7 +20,9 @@
 				Added utils.media namspace to give some help with images utils.media.getMediaObject(int id)
 						utils.media.getImageDimensions(mediaobj media)
 						utils.media.getImageVariantsIds(string mediaElement).	
-	11/2/2015	Added level to recurse to in 
+	11/2/2015	Added utils.getSectionInfo.getPathUntilLevel(finalLevel, currentSection, path)
+				Added utils.getSectionInfo.getPathBySteps(stepsUp, currentSectio, path)
+				Modded utils.getSectionInfo.getRootPath to use getPathUntilLevel(0);
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
