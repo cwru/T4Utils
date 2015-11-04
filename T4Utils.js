@@ -20,8 +20,8 @@
 				Added utils.media namspace to give some help with images utils.media.getMediaObject(int id)
 						utils.media.getImageDimensions(mediaobj media)
 						utils.media.getImageVariantsIds(string mediaElement).	
-	11/2/2015	Added utils.getSectionInfo.getPathUntilLevel(finalLevel, currentSection, path)
-				Added utils.getSectionInfo.getPathBySteps(stepsUp, currentSectio, path)
+	11/2/2015	Added utils.getSectionInfo.getPathUntilLevel(finalLevel, currentSection)
+				Added utils.getSectionInfo.getPathBySteps(stepsUp, currentSection)
 				Modded utils.getSectionInfo.getRootPath to use getPathUntilLevel(0);
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
@@ -263,6 +263,8 @@ var T4Utils = (function (utils) {
 		usage 
 		T4Utils.getSectionInfo.getPathBySteps(1, section); //go 1 step back otherwise get the parent
 		Gets a path from the current section until we get to a certain level. 
+		
+		To Avoid confusion consider making path 
 	*/
 	utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 	{
