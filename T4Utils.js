@@ -151,12 +151,16 @@ var T4Utils = (function (utils) {
 		var c = content || null;
 		if(c !== null)
 			c.getElements();	
+		else
+			return null;
 	}
 	utils.elementInfo.getElementValue = function(elementName) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(elementName).publish();		
+			return c.get(elementName).publish();	
+		else 
+			return null;
 	}
 	//This may not work. 
 	utils.elementInfo.getElementName = function(element) 
@@ -164,12 +168,16 @@ var T4Utils = (function (utils) {
 		var c = content || null; 
 		if(c !== null)
 			return c.get(element).getName();		
+		else
+			return null;
 	}
 	utils.elementInfo.getElementID = function(element) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(element).getID();		
+			return c.get(element).getID();
+		else
+			return null;
 	}	
 		
 	
