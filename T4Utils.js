@@ -23,6 +23,7 @@
 	11/2/2015	Added utils.getSectionInfo.getPathUntilLevel(finalLevel, currentSection)
 				Added utils.getSectionInfo.getPathBySteps(stepsUp, currentSection)
 				Modded utils.getSectionInfo.getRootPath to use getPathUntilLevel(0);
+	1/6/2016	Modded the elementInfo namespace. This includes some bug checks.
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -48,7 +49,7 @@
 /* 
 	Utility Javascript for T4 Javascript Content Processor
    	Ben Margevicius; bdm4@case.edu
-	Version 0.18 11/2/15
+	Version 0.18.1 1/6/16
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/	
 */
@@ -86,7 +87,7 @@ importPackage(com.terminalfour.media.utils);
 
 //IIFE for t4Utils. NOTE you can't use the window namespace for window.ns = window.ns || {} 
 var T4Utils = (function (utils) {  	
-	utils.version = 'v0.18';	
+	utils.version = 'v0.18.1';	
 	
 	/* Console utils for debugging. Don't leave these in your layouts.. 
 		T4Utils.console.log("log message");
@@ -154,30 +155,44 @@ var T4Utils = (function (utils) {
 		else
 			return null;
 	}
-	utils.elementInfo.getElementValue = function(elementName) 
+	utils.elementInfo.getElementValue = function(element) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(elementName).publish();	
-		else 
-			return null;
-	}
-	//This may not work. 
+		{
+			var el = c.get(element);
+			if(typeof el.publish === "function")
+			{
+				return el.publish();	
+			}
+		}	
+		return null;
+	}	 
 	utils.elementInfo.getElementName = function(element) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(element).getName();		
-		else
-			return null;
+		{	
+			var el = c.get(element);
+			if(typeof el.getName === "function")
+			{
+				return c.get(element).getName();	
+			}			
+		}
+		return null;
 	}
 	utils.elementInfo.getElementID = function(element) 
 	{
 		var c = content || null; 
 		if(c !== null)
-			return c.get(element).getID();
-		else
-			return null;
+		{
+			var el = c.get(element);
+			if(typeof el.getID === "function")
+			{
+				return el.getID();
+			}			
+		}
+		return null;
 	}	
 		
 	
