@@ -345,10 +345,39 @@ var T4Utils = (function (utils) {
 	}
 	/*
 	*/
-	utils.media.getImageTag = function(imageSource, cssClass)
+	utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
 	{
+		var source = imageSource; //cache the name of the source element
+		var myid = utils.elementInfo.getElementID(source);
+		var variants = utils.media.getImageVariantsIds(source); //get the variants of the media element
+		var sourceMediaObject = utils.media.getMediaObject(myid); //Returns a type of Media
+		var sourceDimensions = utils.media.getImageDimensions(sourceMediaObject);
+		var saucepath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ myid +'" formatter="path/*"/>'); 
 		
-		return "";
+		
+		var imagesrc = '<img alt="' + altText + '" class="' + cssClass +'" src="'+ saucepath + '"';  	
+		var variantIDs = utils.media.getImageVariantsIds(source);
+		if(variantIDs.length)
+		{
+			imagesrc += ' srcset="' + saucepath + ' ' + sourceDimensions.width + 'w, '; 
+		  
+			for(i = 0; i < variantIDs.length; i++)
+			{
+				var variantObj = utils.media.getMediaObject(variantIDs[i]); //Get the object from the id
+				var dimensions = utils.media.getImageDimensions(variantObj); //get the dimensions of the image
+				var variantpath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ variants[i] +'" formatter="path/*"/>'); //get the src path
+				imagesrc += variantpath + ' ' + dimensions.width + 'w, '; //concat our srcset tag. 
+			}     	
+			imagesrc = imagesrc.slice(0, -2); //remove the trailing ', '
+			imagesrc += '"'; //add our double quotes
+		 
+			if(sizes.length)
+			{              
+			  imagesrc += ' sizes="' + sizes + '"';
+			}
+		}
+		imagesrc += ' />';   //cap our html element.		
+		return imagesrc;
 	}
 	
     return utils; //return out of the module 
