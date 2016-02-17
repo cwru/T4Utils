@@ -347,36 +347,55 @@ var T4Utils = (function (utils) {
 	*/
 	utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
 	{
-		var source = imageSource; //cache the name of the source element
-		var myid = utils.elementInfo.getElementID(source);
-		var variants = utils.media.getImageVariantsIds(source); //get the variants of the media element
-		var sourceMediaObject = utils.media.getMediaObject(myid); //Returns a type of Media
-		var sourceDimensions = utils.media.getImageDimensions(sourceMediaObject);
-		var saucepath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ myid +'" formatter="path/*"/>'); 
+		var imagesrc = '';
 		
-		
-		var imagesrc = '<img alt="' + altText + '" class="' + cssClass +'" src="'+ saucepath + '"';  	
-		var variantIDs = utils.media.getImageVariantsIds(source);
-		if(variantIDs.length)
+		try
 		{
-			imagesrc += ' srcset="' + saucepath + ' ' + sourceDimensions.width + 'w, '; 
-		  
-			for(i = 0; i < variantIDs.length; i++)
+			var source = imageSource; //cache the name of the source element
+			var myid = utils.elementInfo.getElementID(source);
+			var variants = utils.media.getImageVariantsIds(source); //get the variants of the media element
+			var sourceMediaObject = utils.media.getMediaObject(myid); //Returns a type of Media
+			var sourceDimensions = utils.media.getImageDimensions(sourceMediaObject);
+			
+			//var saucepath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ myid +'" formatter="path/*"/>'); 
+			//var t4src = '< t4 type="media" id="'+ myid +'" formatter="path/*" />';		
+			var t4src = "<t4 />"
+			utils.write("Processing t4Tag: " + t4src);
+			utils.write("t4src is type: " + typeof t4src);
+			utils.write("t4src.length: " + t4src.length);
+			
+			var saucepath = com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, t4src); 
+			utils.write("Source path: " + saucepath)
+			
+			var imagesrc = '<img alt="' + altText + '" class="' + cssClass +'" src="'+ saucepath + '"';  	
+			var variantIDs = utils.media.getImageVariantsIds(source);
+			if(variantIDs.length)
 			{
-				var variantObj = utils.media.getMediaObject(variantIDs[i]); //Get the object from the id
-				var dimensions = utils.media.getImageDimensions(variantObj); //get the dimensions of the image
-				var variantpath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ variants[i] +'" formatter="path/*"/>'); //get the src path
-				imagesrc += variantpath + ' ' + dimensions.width + 'w, '; //concat our srcset tag. 
-			}     	
-			imagesrc = imagesrc.slice(0, -2); //remove the trailing ', '
-			imagesrc += '"'; //add our double quotes
-		 
-			if(sizes.length)
-			{              
-			  imagesrc += ' sizes="' + sizes + '"';
+				imagesrc += ' srcset="' + saucepath + ' ' + sourceDimensions.width + 'w, '; 
+			  
+				for(i = 0; i < variantIDs.length; i++)
+				{
+					var variantObj = utils.media.getMediaObject(variantIDs[i]); //Get the object from the id
+					var dimensions = utils.media.getImageDimensions(variantObj); //get the dimensions of the image
+					var variantpath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ variants[i] +'" formatter="path/*"/>'); //get the src path
+					imagesrc += variantpath + ' ' + dimensions.width + 'w, '; //concat our srcset tag. 
+				}     	
+				imagesrc = imagesrc.slice(0, -2); //remove the trailing ', '
+				imagesrc += '"'; //add our double quotes
+			 
+				if(sizes.length)
+				{              
+				  imagesrc += ' sizes="' + sizes + '"';
+				}
 			}
+			imagesrc += ' />';   //cap our html element.
+			imagesrc = myid; //debugging
 		}
-		imagesrc += ' />';   //cap our html element.		
+		catch(err)
+		{
+			document.write("error processing utils.media.getImageTag()");
+			document.write(err.message);
+		}
 		return imagesrc;
 	}
 	
