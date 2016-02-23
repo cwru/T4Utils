@@ -198,7 +198,6 @@ var T4Utils = (function (utils) {
 		
 	
     /* 
-	
 		getSectionInfo namespace gets 
        information about a section. duh.       
     */
@@ -349,6 +348,24 @@ var T4Utils = (function (utils) {
 	{
 		
 		return "";
+	}
+	
+	 /* 
+		security namespace contains methods to do things securely?            
+    */
+    utils.security = utils.security || {};
+	
+	//Takes in a plaintext string and converts it to a base64 encoded Hash
+	utils.security.toSHA256 = function(plainText) {		
+		MessageDigest md;
+		try
+		{
+			md = MessageDigest.getInstance("SHA-256");			
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			document.write(e.getMessage());
+		}
 	}
 	
     return utils; //return out of the module 
