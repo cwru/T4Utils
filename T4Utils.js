@@ -356,16 +356,28 @@ var T4Utils = (function (utils) {
     utils.security = utils.security || {};
 	
 	//Takes in a plaintext string and converts it to a base64 encoded Hash
-	utils.security.toSHA256 = function(plainText) {		
-		MessageDigest md;
+	utils.security.toSHA256 = function(plainText) {	
+		importPackage(java.io, java.security);
+
+		var hash;
 		try
 		{
-			md = MessageDigest.getInstance("SHA-256");			
+			var md = MessageDigest.getInstance("SHA-256");
+			var pwBytes = new java.lang.String(plainText).getBytes("UTF-8");    
+			md.update(pwBytes);
+			var hashedBytes = md.digest();
+			var sb = new java.lang.StringBuffer();
+			for (var i = 0; i < hashedBytes.length; i++) {
+				sb.append(java.lang.Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			hash = sb.toString();
 		}
-		catch (NoSuchAlgorithmException e)
-		{
-			document.write(e.getMessage());
+		catch(e)
+		{        
+			document.write(e);
 		}
+
+		return hash;
 	}
 	
     return utils; //return out of the module 
