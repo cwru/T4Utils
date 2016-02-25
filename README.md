@@ -1,6 +1,7 @@
-# Utility Javascript for T4 Javascript Content Processor
+[![forthebadge](http://forthebadge.com/images/badges/powered-by-case-western-reserve.svg)](http://forthebadge.com)
+
   Ben Margevicius; bdm4@case.edu
-	Version 0.14 7/20/2015
+	Version 0.19 2/25/2015
    
 	Github source: https://github.com/CaseWesternReserveUniversity/T4Utils/
 	
@@ -17,8 +18,7 @@
 	T4Utils.blah = T4Utils.blah || {};
 	T4Utils.blah.hello = function() {
 		T4Utils.write("hello");   
-	}
-
+	}	
 	T4Utils.blah.hello(); //writes hello
 	
 	#Adding an image from the media library:
