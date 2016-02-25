@@ -198,7 +198,6 @@ var T4Utils = (function (utils) {
 		
 	
     /* 
-	
 		getSectionInfo namespace gets 
        information about a section. duh.       
     */
@@ -349,6 +348,37 @@ var T4Utils = (function (utils) {
 	{
 		
 		return "";
+	}
+	
+	 /* 
+		security namespace contains methods to do things securely?            
+    */
+    utils.security = utils.security || {};
+	
+	/**
+		Hashes a plaintext string into a SHA-256 Hex Encoded String
+	**/	
+	utils.security.toSHA256 = function(plainText) {	
+		importPackage(java.security);
+
+		var hash;
+		try
+		{	
+			var md = MessageDigest.getInstance("SHA-256"); //Every implementation is required to have MD5, SHA-1, SHA-256. Don't use MD5 or SHA-1 anymore. 
+			var pwBytes = new java.lang.String(plainText).getBytes("UTF-8");    
+			md.update(pwBytes);
+			var hashedBytes = md.digest();
+			var sb = new java.lang.StringBuffer();
+			for (var i = 0; i < hashedBytes.length; i++) {
+				sb.append(java.lang.Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16).substring(1)); //borrowed from http://www.mkyong.com/java/java-sha-hashing-example/
+			}
+			hash = sb.toString();
+		}
+		catch(e)
+		{        
+			document.write(e);
+		}
+		return hash;
 	}
 	
     return utils; //return out of the module 
