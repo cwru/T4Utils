@@ -2,7 +2,8 @@
 
   Ben Margevicius; bdm4@case.edu
 	Version 1.0.0 4/4/2016
-   
+	The latest build is in the T4Utils directory. Or you can install node.js, npm update, then run gulp to execute gulpfile.js script. Warning: jshint is throwing a ton of errors. 
+	
 	Github source: https://github.com/FPBSchoolOfNursing/T4Utils/
 	
 	#Usage:
