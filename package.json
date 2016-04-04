@@ -1,0 +1,28 @@
+{
+  "name": "t4utils",
+  "version": "1.0.0",
+  "description": "This is a utility class that can be used in conjuntion with content types in the Terminal 4 CMS.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FPBSchoolOfNursing/T4Utils.git"
+  },
+  "keywords": [
+    "Terminal 4"
+  ],
+  "author": "Ben Margevicius",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FPBSchoolOfNursing/T4Utils/issues"
+  },
+  "homepage": "https://github.com/FPBSchoolOfNursing/T4Utils#readme",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jsdoc3": "^0.2.1",
+    "gulp-jshint": "^2.0.0",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.9.1",
+    "jshint-stylish": "^2.1.0"
+  }
+}
