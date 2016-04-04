@@ -5,10 +5,10 @@
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
+ * DOX: https://community.terminalfour.com/info/api/sitemanager-7.3/index.html
  */
 
 'use strict';
-
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
 

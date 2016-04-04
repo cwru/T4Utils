@@ -10,7 +10,8 @@ var gulp = require('gulp'),
 	del = require('del'),
 	uglify = require('gulp-uglify'),
 	concat = require('gulp-concat'),
-	package = require('./package.json'),    
+	package = require('./package.json'),
+	jsdoc = require('gulp-jsdoc3'),
 	jshint = require('gulp-jshint'),	
 	jshintStylish = require('jshint-stylish');
 	
@@ -19,6 +20,10 @@ var config = {
 	t4version: '7.4', //you'll have to config this for your environment
 	components: ['./components/base.js', 
 				 './components/sitemanager.js',
+				 './components/brokerUtils.js',
+				 './components/elementInfo.js',
+				 './components/getSectionInfo.js',
+				 './components/media.js',
 				 './components/security.js'
 				],		
 	outputDir: './T4Utils/'	
@@ -26,6 +31,11 @@ var config = {
 
 gulp.task('clean', function () {
 	return del(config.outputDir + '**/*.js');	
+});
+
+gulp.task('doc', function(cb) {
+	gulp.src(config.outputDir + "*.js", {read: false})
+		.pipe(jsdoc(cb));
 });
 
 gulp.task('build-utils', ['clean'], function() {
@@ -36,5 +46,6 @@ gulp.task('build-utils', ['clean'], function() {
 		//.pipe(uglify())		
 		.pipe(gulp.dest(config.outputDir));
 });
+
 
 gulp.task('default', ['clean','build-utils']);	
