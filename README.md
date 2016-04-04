@@ -1,7 +1,7 @@
 [![forthebadge](http://forthebadge.com/images/badges/powered-by-case-western-reserve.svg)](http://forthebadge.com)
 
   Ben Margevicius; bdm4@case.edu
-	Version 1.0.0 4/4/2015
+	Version 1.0.0 4/4/2016
    
 	Github source: https://github.com/FPBSchoolOfNursing/T4Utils/
 	
