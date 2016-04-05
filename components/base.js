@@ -89,7 +89,7 @@ var T4Utils = (function (utils) {
 	* Outputs the version of this utility
 	* @return {string} The version of the T4Utility Class 
 	*/
-	utils.version = 'v1.0.1_2016.05.04';
+	utils.version = 'v1.0.2_2016.05.04';
 	
 	
 	/**
