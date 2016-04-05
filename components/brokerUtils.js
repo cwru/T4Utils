@@ -19,4 +19,4 @@ T4Utils.brokerUtils = T4Utils.brokerUtils || {};
 T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
 	var myContent = content || null; 
 	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
-}
+};

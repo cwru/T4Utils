@@ -1,6 +1,6 @@
 /** 	
 * t4utils - This is a utility class that can be used in conjuntion with content types in the Terminal 4 CMS.
-* @version v1.0.0
+* @version v1.0.1
 * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius
 * Copyright 2016. MIT licensed. 
@@ -9,7 +9,10 @@
 var gulp = require('gulp'),
 	del = require('del'),
 	uglify = require('gulp-uglify'),
+	rename = require('gulp-rename'),
+	gulpif = require('gulp-if'),
 	concat = require('gulp-concat'),
+	header = require('gulp-header'),
 	package = require('./package.json'),
 	jsdoc = require('gulp-jsdoc3'),
 	jshint = require('gulp-jshint'),	
@@ -26,7 +29,17 @@ var config = {
 				 './components/media.js',
 				 './components/security.js'
 				],		
-	outputDir: './T4Utils/'	
+	outputDir: './T4Utils/',
+	isProduction: (process.env.NODE_ENV === 'production'), //Set from command line like SET NODE_ENV=production. 
+	banner: ['/**',
+		' * <%= package.name %> - <%= package.description %>',
+		' * @version v<%= package.version %>',
+		' * @link <%= package.repository.url %>',		
+		' * @author <%= package.author %>',		
+		' * Copyright ' + new Date().getFullYear() + '. <%= package.license %> licensed.',	
+		' * Built: ' + new Date() + '.',		
+		' */',
+		''].join('\n')
 };
 
 gulp.task('clean', function () {
@@ -41,9 +54,12 @@ gulp.task('doc', function(cb) {
 gulp.task('build-utils', ['clean'], function() {
 	return gulp.src(config.components)
 		.pipe(jshint()) 	//check our js
-		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors		
+		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors	
+		.pipe(jshint.reporter('fail'))
 		.pipe(concat('T4Utils.' + config.t4version + '.js'))		
-		//.pipe(uglify())		
+		.pipe(gulpif(config.isProduction, uglify()))
+		.pipe(gulpif(config.isProduction, rename({ suffix: ".min" })))
+		.pipe(header(config.banner, { package: package })) //add our commented headers. 		
 		.pipe(gulp.dest(config.outputDir));
 });
 

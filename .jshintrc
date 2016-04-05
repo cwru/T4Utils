@@ -42,10 +42,10 @@
     "boss"          : false,     // true: Tolerate assignments where comparisons would be expected
     "debug"         : false,     // true: Allow debugger statements e.g. browser breakpoints.
     "eqnull"        : false,     // true: Tolerate use of `== null`
-    "esversion"     : 5,         // {int} Specify the ECMAScript version to which the code must adhere.
+    "esversion"     : 6,         // {int} Specify the ECMAScript version to which the code must adhere.
     "moz"           : false,     // true: Allow Mozilla specific syntax (extends and overrides esnext features)
                                  // (ex: `for each`, multiple try/catch, function expression…)
-    "evil"          : false,     // true: Tolerate use of `eval` and `new Function()`
+    "evil"          : true,     // true: Tolerate use of `eval` and `new Function()`
     "expr"          : false,     // true: Tolerate `ExpressionStatement` as Programs
     "funcscope"     : false,     // true: Tolerate defining variables inside control statements
     "globalstrict"  : false,     // true: Allow global "use strict" (also enables 'strict')
@@ -71,7 +71,7 @@
     "devel"         : true,     // Development/debugging (alert, confirm, etc)
     "dojo"          : false,    // Dojo Toolkit
     "jasmine"       : false,    // Jasmine
-    "jquery"        : true,    // jQuery
+    "jquery"        : false,    // jQuery
     "mocha"         : false,     // Mocha
     "mootools"      : false,    // MooTools
     "node"          : false,    // Node.js
@@ -79,7 +79,7 @@
     "phantom"       : false,    // PhantomJS
     "prototypejs"   : false,    // Prototype and Scriptaculous
     "qunit"         : false,    // QUnit
-    "rhino"         : false,    // Rhino
+    "rhino"         : true,    // Rhino
     "shelljs"       : false,    // ShellJS
     "typed"         : false,    // Globals for typed array constructions
     "worker"        : false,    // Web Workers
@@ -87,5 +87,19 @@
     "yui"           : false,    // Yahoo User Interface
 
     // Custom Globals
-    "globals"       : {}        // additional predefined global variables
+    "globals"       : { // additional predefined global variables
+		"T4Utils" : true ,
+		"importPackage" : true , 
+		"com" : true , 
+		"content" : true , 
+		"language" : true , 
+		"MediaManager" : true ,
+		"MediaUtils" : true ,
+		"dbStatement" : true , 
+		"section" : true , 
+		"publishCache" : true ,
+		"isPreview" : true,
+		"MessageDigest" : true,
+		"PathBuilder" : true		
+	}        
 }
