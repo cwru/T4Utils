@@ -9,6 +9,7 @@
 var gulp = require('gulp'),
 	del = require('del'),
 	uglify = require('gulp-uglify'),
+	gulpif = require('gulp-if'),
 	concat = require('gulp-concat'),
 	package = require('./package.json'),
 	jsdoc = require('gulp-jsdoc3'),
@@ -26,7 +27,8 @@ var config = {
 				 './components/media.js',
 				 './components/security.js'
 				],		
-	outputDir: './T4Utils/'	
+	outputDir: './T4Utils/',
+	isProduction: (process.env.NODE_ENV === 'production') //Set from command line like SET NODE_ENV=production. 
 };
 
 gulp.task('clean', function () {
@@ -41,9 +43,10 @@ gulp.task('doc', function(cb) {
 gulp.task('build-utils', ['clean'], function() {
 	return gulp.src(config.components)
 		.pipe(jshint()) 	//check our js
-		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors		
+		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors	
+		.pipe(jshint.reporter('fail'))
 		.pipe(concat('T4Utils.' + config.t4version + '.js'))		
-		//.pipe(uglify())		
+		.pipe(gulpif(config.isProduction, uglify()))	
 		.pipe(gulp.dest(config.outputDir));
 });
 

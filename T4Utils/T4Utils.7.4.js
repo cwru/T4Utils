@@ -9,7 +9,7 @@
  */
 
 'use strict';
-
+/*jshint -W097*/
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
 
