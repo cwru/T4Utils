@@ -8,7 +8,7 @@
  */
 
 
-/* jshint strict: false */
+/* jshint strict: false*/
 /**
 * Security namespace declaration
 */
@@ -41,4 +41,4 @@ T4Utils.security.toSHA256 = function(plainText) {
 		document.write(e);
 	}
 	return hash;
-}
+};

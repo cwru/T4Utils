@@ -1,9 +1,9 @@
 /**
  * T4Utils.base - Starting point of the T4Utils class. This must appear first. 
- * @version v1.0.0
+ * @version v1.0.1
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 4, 2016
+ * @date April 5, 2016
  * Copyright 2016. MIT licensed.
  * DOX: https://community.terminalfour.com/info/api/sitemanager-7.3/index.html
  */
@@ -17,7 +17,7 @@ var T4Utils = (function (utils) {
 	* Outputs the version of this utility
 	* @return {string} The version of the T4Utility Class 
 	*/
-	utils.version = 'v1.0.0_2016.04.04';
+	utils.version = 'v1.0.1_2016.05.04';
 	
 	
 	/**
@@ -26,27 +26,33 @@ var T4Utils = (function (utils) {
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console = function(consoleMethod, textOrObj) {		
-		if(typeof textOrObj === "string")			
+		if(typeof textOrObj === "string") 
+		{			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
-	}
+		}
+	};
 	
 	/**
 	* Writes a message to the browser console 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.log = function(textOrObj) {		
-		if(typeof textOrObj === "string")			
+		if(typeof textOrObj === "string")	
+		{			
 			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
-	}
+		}
+	};
 	
 	/**
 	* Writes a warning to the browser console 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.warn = function(textOrObj) {		
-		if(typeof textOrObj === "string")			
+		if(typeof textOrObj === "string")
+		{
 			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
-	}
+		}
+	};
 	
 	/**
 	* Writes an error to the browser console 
@@ -54,8 +60,10 @@ var T4Utils = (function (utils) {
 	*/
 	utils.console.error = function(textOrObj) {		
 		if(typeof textOrObj === "string")
+		{
 			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
-	}
+		}
+	};
 	
 	/**
 	* Writes a paragraph formatted HTML message to the browser 
@@ -64,7 +72,7 @@ var T4Utils = (function (utils) {
     utils.write = function(text)
     {
       document.write("<p>" + text + "</p>\n");
-    }
+    };
     
 	/**
 	* Converts a javascript object to Java string
@@ -75,20 +83,15 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
-	}
+	};
 	
-	/**
-	*	Returns an escaped Html making parsing of t4 tags inside this utility easier. Credit to Paul Kelly of T4
-	*	@param {string} unsafe - the string to convert
-	* 	@return {string} Returns an escaped html tag for processing
-	*/
 	utils.escapeHtml = function (unsafe) {
 		return unsafe.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;")
-			.replace(/'/g, "&#039;");	
-	}
+    			.replace(/</g, "&lt;")
+    			.replace(/>/g, "&gt;")
+    			.replace(/'/g, "&#039;");
+    			//.replace(/"/g, "&quot;");	
+	};
 	return utils;
 })(T4Utils || {});
 /**
@@ -144,7 +147,7 @@ T4Utils.brokerUtils = T4Utils.brokerUtils || {};
 T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
 	var myContent = content || null; 
 	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
-}
+};
 /**
  * T4Utils.elementInfo - elementInfo namespace for T4
  * @version v1.0.0
@@ -166,11 +169,13 @@ T4Utils.elementInfo = T4Utils.elementInfo || {};
 */	
 T4Utils.elementInfo.getElements = function() {
 	var c = content || null;
-	if(c !== null)
+	if(c !== null) {
 		c.getElements();	
-	else
+	}
+	else {
 		return null;
-}
+	}
+};
 
 /**
 *	If the element is "text", get its' "publish" value as a String.
@@ -189,7 +194,7 @@ T4Utils.elementInfo.getElementValue = function(element)
 		}
 	}	
 	return null;
-}	
+};	
 
 /**
 *	Used to get the name of the element.
@@ -208,7 +213,7 @@ T4Utils.elementInfo.getElementName = function(element)
 		}			
 	}
 	return null;
-}
+};
 
 /**
 *	Used to get the ID of the element.
@@ -227,7 +232,7 @@ T4Utils.elementInfo.getElementID = function(element)
 		}			
 	}
 	return null;
-}	
+};	
  /**
  * T4Utils.getSectionInfo - getSectionInfo namespace gets information about a section. duh.
  * @version v1.0.0
@@ -253,7 +258,7 @@ T4Utils.getSectionInfo = T4Utils.getSectionInfo || {};
 */
 T4Utils.getSectionInfo.getPublishLink = function () {
 	return this.publishLink;
-}
+};
 
 /**
 *	Get a link to this section
@@ -262,7 +267,7 @@ T4Utils.getSectionInfo.getPublishLink = function () {
 */
 T4Utils.getSectionInfo.setPublishLink = function (section) {
 	this.publishLink = PathBuilder.getLink(dbStatement, section, publishCache, language, isPreview); //cache the call         
-}
+};
 
 
 /**
@@ -273,7 +278,7 @@ T4Utils.getSectionInfo.setPublishLink = function (section) {
 T4Utils.getSectionInfo.sectionTitle = function (section) {
 	this.setPublishLink(section);
 	return this.publishLink.getText();
-}
+};
 
 /**
 *	Gets the section link for the section passed in
@@ -283,7 +288,7 @@ T4Utils.getSectionInfo.sectionTitle = function (section) {
 T4Utils.getSectionInfo.sectionLink = function (section) {
 	this.setPublishLink(section);
 	return this.publishLink.getLink();
-}
+};
 
 /**
 *	Gets the section link for the section passed in
@@ -296,7 +301,7 @@ T4Utils.getSectionInfo.anchorLink = function (section) {
 	var theText = this.publishLink.getText();
 	var myLink = '<a href="' + theLink + '">' + theText + '</a>';
 	return myLink;
-}
+};
 
 
 /**
@@ -306,7 +311,7 @@ T4Utils.getSectionInfo.anchorLink = function (section) {
 */
 T4Utils.getSectionInfo.getDirectory = function(section) {
 	return PathBuilder.getDirectory(section, publishCache, language).toString();		
-}
+};
 
 /** 
 *	This is an adaptation of the CachedSection.GetChildren method in the API. 		
@@ -320,7 +325,7 @@ T4Utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
 		isHiddenInNAV = false;
 	}
 	return section.getChildren(publishCache.channel, language, isHiddenInNAV);
-}
+};
 
 
 /**
@@ -330,7 +335,7 @@ T4Utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
 */
 T4Utils.getSectionInfo.getRootPath = function (currentSection) {             
 	return this.getPathUntilLevel(0, currentSection);
-}   
+};   
 
 /**
 *	@usage
@@ -352,7 +357,7 @@ T4Utils.getSectionInfo.getPathUntilLevel = function(finalLevel, currentSection, 
 		return this.getPathUntilLevel(finalLevel, parentSection, path); //recurse up one level. 
 	}
 	else { return path; }
-}
+};
 
 /**
 *	Gets a path from the current section until we are N steps up from root
@@ -374,7 +379,7 @@ T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 		else { return this.getPathBySteps(stepsUp, parentSection, path); }//recurse up one level. 
 	}
 	else { return path; }
-}
+};
 
 /**
 *	Get the level of which the section is at. 
@@ -383,16 +388,16 @@ T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 */
 T4Utils.getSectionInfo.getLevel = function (section) {
 	return section.getLevel(publishCache.channel);
-}
+};
 /**
  * T4Utils.media - Gets objects from the media library.
- * @version v1.0.0
+ * @version v1.0.1
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 4, 2016
+ * @date April 5, 2016
  * Copyright 2016. MIT licensed.
  */
-
+/* jshint strict: false */
 /* import java based dependencies */
 importPackage(com.terminalfour.media);
 importPackage(com.terminalfour.media.utils);
@@ -411,7 +416,7 @@ T4Utils.media.getImageVariantsIds = function(mediaElement) {
 	var imageID = content.get(mediaElement).getID();
 	var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
 	return variantIds;
-}
+};
 
 /**
 *	Gets the dimensions of a media object, obviously you should pass in a picture.
@@ -423,7 +428,7 @@ T4Utils.media.getImageDimensions = function(mediaObj) {
 	d.width = MediaUtils.getImageDimensions(mediaObj)[0];
 	d.height = MediaUtils.getImageDimensions(mediaObj)[1];
 	return d;
-}
+};
 
 /**
 *	Get a media object from it's id. Note this is not the same as the media element
@@ -432,68 +437,29 @@ T4Utils.media.getImageDimensions = function(mediaObj) {
 */
 T4Utils.media.getMediaObject = function(mediaID) {		
 	return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
-}
+};
 
-/**
-* Creates an image tag with srcset from an element source
-* @param {} imageSource - Source media element
-* @param {string} altText - Alt text to the img tag
-* @param {string} cssClass - String for the css classes to be applied
-* @param {string} sizesQuery - Media query for the sizes on the img tag. 100vw is assumed. 
-*/
 T4Utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
 {
 	var imagesrc = '';
 	
 	try
 	{
-		var source = imageSource; //cache the name of the source element
-		var myid = T4Utils.elementInfo.getElementID(source);
-		var variants = T4Utils.media.getImageVariantsIds(source); //get the variants of the media element
-		var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of Media
-		var sourceDimensions = T4Utils.media.getImageDimensions(sourceMediaObject);
-		
-		//var saucepath = utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ myid +'" formatter="path/*"/>'); 
-		//var t4src = '< t4 type="media" id="'+ myid +'" formatter="path/*" />';		
-		var t4src = "<t4 />"
+		var t4src = "<t4 />";
 		T4Utils.write("Processing t4Tag: " + t4src);
 		T4Utils.write("t4src is type: " + typeof t4src);
 		T4Utils.write("t4src.length: " + t4src.length);
-		
-		var saucepath = com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, t4src); 
-		T4Utils.write("Source path: " + saucepath)
-		
-		var imagesrc = '<img alt="' + altText + '" class="' + cssClass +'" src="'+ saucepath + '"';  	
-		var variantIDs = T4Utils.media.getImageVariantsIds(source);
-		if(variantIDs.length)
-		{
-			imagesrc += ' srcset="' + saucepath + ' ' + sourceDimensions.width + 'w, '; 
-		  
-			for(i = 0; i < variantIDs.length; i++)
-			{
-				var variantObj = T4Utils.media.getMediaObject(variantIDs[i]); //Get the object from the id
-				var dimensions = T4Utils.media.getImageDimensions(variantObj); //get the dimensions of the image
-				var variantpath = T4Utils.brokerUtils.processT4Tag('<t4 type="media" id="'+ variants[i] +'" formatter="path/*"/>'); //get the src path
-				imagesrc += variantpath + ' ' + dimensions.width + 'w, '; //concat our srcset tag. 
-			}     	
-			imagesrc = imagesrc.slice(0, -2); //remove the trailing ', '
-			imagesrc += '"'; //add our double quotes
-		 
-			if(sizes.length)
-			{              
-			  imagesrc += ' sizes="' + sizes + '"';
-			}
-		}
-		imagesrc += ' />';   //cap our html element.
-		imagesrc = myid; //debugging
+		T4Utils.write('t4 version: ' + T4Utils.siteManager.version);
+		T4Utils.write('t4 buildDetails: ' + T4Utils.siteManager.buildDetails);
+		T4Utils.write('t4 javaVersion: ' + T4Utils.siteManager.javaVersion);
 	}
 	catch(err)
 	{
-		document.write("error processing T4Utils.media.getImageTag()");
+		document.write("error processing utils.media.getImageTag()");
 		document.write(err.message);
 	}
 	return imagesrc;
-}
+};
 /**
  * T4Utils.security - Security namespace for T4
  * @version v1.0.0
@@ -504,7 +470,7 @@ T4Utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
  */
 
 
-/* jshint strict: false */
+/* jshint strict: false*/
 /**
 * Security namespace declaration
 */
@@ -537,4 +503,4 @@ T4Utils.security.toSHA256 = function(plainText) {
 		document.write(e);
 	}
 	return hash;
-}
+};

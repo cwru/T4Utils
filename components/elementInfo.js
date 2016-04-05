@@ -19,11 +19,13 @@ T4Utils.elementInfo = T4Utils.elementInfo || {};
 */	
 T4Utils.elementInfo.getElements = function() {
 	var c = content || null;
-	if(c !== null)
+	if(c !== null) {
 		c.getElements();	
-	else
+	}
+	else {
 		return null;
-}
+	}
+};
 
 /**
 *	If the element is "text", get its' "publish" value as a String.
@@ -42,7 +44,7 @@ T4Utils.elementInfo.getElementValue = function(element)
 		}
 	}	
 	return null;
-}	
+};	
 
 /**
 *	Used to get the name of the element.
@@ -61,7 +63,7 @@ T4Utils.elementInfo.getElementName = function(element)
 		}			
 	}
 	return null;
-}
+};
 
 /**
 *	Used to get the ID of the element.
@@ -80,4 +82,4 @@ T4Utils.elementInfo.getElementID = function(element)
 		}			
 	}
 	return null;
-}	
+};	

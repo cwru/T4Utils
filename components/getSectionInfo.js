@@ -23,7 +23,7 @@ T4Utils.getSectionInfo = T4Utils.getSectionInfo || {};
 */
 T4Utils.getSectionInfo.getPublishLink = function () {
 	return this.publishLink;
-}
+};
 
 /**
 *	Get a link to this section
@@ -32,7 +32,7 @@ T4Utils.getSectionInfo.getPublishLink = function () {
 */
 T4Utils.getSectionInfo.setPublishLink = function (section) {
 	this.publishLink = PathBuilder.getLink(dbStatement, section, publishCache, language, isPreview); //cache the call         
-}
+};
 
 
 /**
@@ -43,7 +43,7 @@ T4Utils.getSectionInfo.setPublishLink = function (section) {
 T4Utils.getSectionInfo.sectionTitle = function (section) {
 	this.setPublishLink(section);
 	return this.publishLink.getText();
-}
+};
 
 /**
 *	Gets the section link for the section passed in
@@ -53,7 +53,7 @@ T4Utils.getSectionInfo.sectionTitle = function (section) {
 T4Utils.getSectionInfo.sectionLink = function (section) {
 	this.setPublishLink(section);
 	return this.publishLink.getLink();
-}
+};
 
 /**
 *	Gets the section link for the section passed in
@@ -66,7 +66,7 @@ T4Utils.getSectionInfo.anchorLink = function (section) {
 	var theText = this.publishLink.getText();
 	var myLink = '<a href="' + theLink + '">' + theText + '</a>';
 	return myLink;
-}
+};
 
 
 /**
@@ -76,7 +76,7 @@ T4Utils.getSectionInfo.anchorLink = function (section) {
 */
 T4Utils.getSectionInfo.getDirectory = function(section) {
 	return PathBuilder.getDirectory(section, publishCache, language).toString();		
-}
+};
 
 /** 
 *	This is an adaptation of the CachedSection.GetChildren method in the API. 		
@@ -90,7 +90,7 @@ T4Utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
 		isHiddenInNAV = false;
 	}
 	return section.getChildren(publishCache.channel, language, isHiddenInNAV);
-}
+};
 
 
 /**
@@ -100,7 +100,7 @@ T4Utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
 */
 T4Utils.getSectionInfo.getRootPath = function (currentSection) {             
 	return this.getPathUntilLevel(0, currentSection);
-}   
+};   
 
 /**
 *	@usage
@@ -122,7 +122,7 @@ T4Utils.getSectionInfo.getPathUntilLevel = function(finalLevel, currentSection, 
 		return this.getPathUntilLevel(finalLevel, parentSection, path); //recurse up one level. 
 	}
 	else { return path; }
-}
+};
 
 /**
 *	Gets a path from the current section until we are N steps up from root
@@ -144,7 +144,7 @@ T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 		else { return this.getPathBySteps(stepsUp, parentSection, path); }//recurse up one level. 
 	}
 	else { return path; }
-}
+};
 
 /**
 *	Get the level of which the section is at. 
@@ -153,4 +153,4 @@ T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 */
 T4Utils.getSectionInfo.getLevel = function (section) {
 	return section.getLevel(publishCache.channel);
-}
+};
