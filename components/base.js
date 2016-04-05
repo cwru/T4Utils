@@ -9,6 +9,7 @@
  */
 
 'use strict';
+
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
 
@@ -74,6 +75,19 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
+	}
+	
+	/**
+	*	Returns an escaped Html making parsing of t4 tags inside this utility easier. Credit to Paul Kelly of T4
+	*	@param {string} unsafe - the string to convert
+	* 	@return {string} Returns an escaped html tag for processing
+	*/
+	utils.escapeHtml = function (unsafe) {
+		return unsafe.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#039;");	
 	}
 	return utils;
 })(T4Utils || {});

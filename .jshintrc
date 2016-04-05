@@ -71,7 +71,7 @@
     "devel"         : true,     // Development/debugging (alert, confirm, etc)
     "dojo"          : false,    // Dojo Toolkit
     "jasmine"       : false,    // Jasmine
-    "jquery"        : true,    // jQuery
+    "jquery"        : false,    // jQuery
     "mocha"         : false,     // Mocha
     "mootools"      : false,    // MooTools
     "node"          : false,    // Node.js
@@ -79,7 +79,7 @@
     "phantom"       : false,    // PhantomJS
     "prototypejs"   : false,    // Prototype and Scriptaculous
     "qunit"         : false,    // QUnit
-    "rhino"         : false,    // Rhino
+    "rhino"         : true,    // Rhino
     "shelljs"       : false,    // ShellJS
     "typed"         : false,    // Globals for typed array constructions
     "worker"        : false,    // Web Workers
@@ -87,5 +87,17 @@
     "yui"           : false,    // Yahoo User Interface
 
     // Custom Globals
-    "globals"       : {}        // additional predefined global variables
+    "globals"       : { // additional predefined global variables
+		"T4Utils" : true ,
+		"importPackage" : true , 
+		"com" : true , 
+		"content" : true , 
+		"language" : true , 
+		"MediaManager" : true ,
+		"dbStatement" : true , 
+		"section" : true , 
+		"publishCache" : true ,
+		"isPreview" : true,
+		"MessageDigest" : true 
+	}        
 }

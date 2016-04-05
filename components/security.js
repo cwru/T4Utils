@@ -20,6 +20,7 @@ T4Utils.security = T4Utils.security || {};
 *	@return {string} A string value of the hash
 */	
 T4Utils.security.toSHA256 = function(plainText) {	
+	/* jshint bitwise: false */
 	importPackage(java.security);
 
 	var hash;
