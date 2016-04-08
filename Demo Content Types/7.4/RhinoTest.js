@@ -8,8 +8,9 @@ try {
         throw( e );
     }
 }
+try
+{
 var hr = "<hr>";
-
 
 T4Utils.write("version: " + T4Utils.version);
 T4Utils.write("Sitemanager: " + T4Utils.siteManager.version + T4Utils.siteManager.buildDetails);
@@ -36,3 +37,8 @@ else
 }
 
 T4Utils.write('SHA-256 of "' + testStr + '": ' + T4Utils.security.toSHA256(testStr));
+document.write(hr);
+}
+catch (e) {   
+    document.write(e.message);
+}
