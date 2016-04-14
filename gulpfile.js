@@ -1,6 +1,6 @@
 /** 	
 * t4utils - This is a utility class that can be used in conjuntion with content types in the Terminal 4 CMS.
-* @version v1.0.1
+* @version v1.0.2
 * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius
 * Copyright 2016. MIT licensed. 
@@ -21,7 +21,8 @@ var gulp = require('gulp'),
 
 var config = {	
 	t4version: '7.4', //you'll have to config this for your environment
-	components: ['./components/base.js', 
+	components: ['./components/javadependencies.js',
+				 './components/base.js', 				 
 				 './components/sitemanager.js',
 				 './components/brokerUtils.js',
 				 './components/elementInfo.js',

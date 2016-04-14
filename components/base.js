@@ -30,6 +30,7 @@
 				Merged in security.toSHA256(plainText)
 	4/5/2016	Changed to a modular format. Using NPM + Gulp to script the builds. Changed to semantic versioning.
 				Added another attempt at media.GetImageTag. It's incomplete ATM.
+	4/14/2016	Moved the java depedencies to a seperate file. This is done to prevent future duplicates.
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -89,7 +90,7 @@ var T4Utils = (function (utils) {
 	* Outputs the version of this utility
 	* @return {string} The version of the T4Utility Class 
 	*/
-	utils.version = 'v1.0.1_2016.05.04';
+	utils.version = 'v1.0.2_2016.14.04';
 	
 	
 	/**
@@ -155,6 +156,17 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
+	};
+	
+	/**
+	* Converts a javascript object to Java string by prototying
+	* @return {java.lang.String} The converted object.	
+	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
+	* jshint -w121 extending the native javascript String object.
+	*/
+	/*jshint -W121*/
+	String.prototype.toJavaString = function () {
+		return new java.lang.String(this); //this is crazy.		
 	};
 	
 	utils.escapeHtml = function (unsafe) {
