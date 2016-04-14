@@ -21,7 +21,8 @@ var gulp = require('gulp'),
 
 var config = {	
 	t4version: '7.4', //you'll have to config this for your environment
-	components: ['./components/base.js', 
+	components: ['./components/javadependencies.js',
+				 './components/base.js', 				 
 				 './components/sitemanager.js',
 				 './components/brokerUtils.js',
 				 './components/elementInfo.js',

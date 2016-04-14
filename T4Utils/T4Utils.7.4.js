@@ -4,8 +4,22 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Tue Apr 05 2016 16:51:52 GMT-0400 (Eastern Daylight Time).
+ * Built: Thu Apr 14 2016 11:04:00 GMT-0400 (Eastern Daylight Time).
  */
+/**
+ * Java dependencies - 
+ * @version v1.0.2
+ * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+ * @author Ben Margevicius
+ * @date April 14, 2016
+ * Copyright 2016. MIT licensed.
+ */
+/* jshint strict: false */
+/* getSectionInfo.js */
+importClass(com.terminalfour.publish.PathBuilder); 
+/* media.js */
+importPackage(com.terminalfour.media);
+importPackage(com.terminalfour.media.utils);
 /*  Versioning    
 	6/24/2015 - Initial
 	6/30/2015 - Added stuff from T4's javascript util (https://community.terminalfour.com/forum/index.php?topic=426.0)
@@ -315,17 +329,17 @@ T4Utils.elementInfo.getElementID = function(element)
 };	
  /**
  * T4Utils.getSectionInfo - getSectionInfo namespace gets information about a section. duh.
- * @version v1.0.0
+ * @version v1.0.2
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
+ *
+ * v1.0.2 Moved dependencies
+ *
  */
  
 /* jshint strict: false */
-
-/* Import Java based dependencies */
-importClass(com.terminalfour.publish.PathBuilder); 
 
 /**
 * Security namespace declaration
@@ -471,16 +485,15 @@ T4Utils.getSectionInfo.getLevel = function (section) {
 };
 /**
  * T4Utils.media - Gets objects from the media library.
- * @version v1.0.1
+ * @version v1.0.2
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 5, 2016
- * Copyright 2016. MIT licensed.
+ * @date April 14, 2016
+ * Copyright 2016. MIT licensed
+ *
+ * 4/14/16 v1.0.2 moved dependancies to javadependencies.js
  */
 /* jshint strict: false */
-/* import java based dependencies */
-importPackage(com.terminalfour.media);
-importPackage(com.terminalfour.media.utils);
 
 /**
 * Media namespace declaration

@@ -1,16 +1,16 @@
  /**
  * T4Utils.getSectionInfo - getSectionInfo namespace gets information about a section. duh.
- * @version v1.0.0
+ * @version v1.0.2
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
+ *
+ * v1.0.2 Moved dependencies
+ *
  */
  
 /* jshint strict: false */
-
-/* Import Java based dependencies */
-importClass(com.terminalfour.publish.PathBuilder); 
 
 /**
 * Security namespace declaration
