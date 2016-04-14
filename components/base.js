@@ -30,6 +30,7 @@
 				Merged in security.toSHA256(plainText)
 	4/5/2016	Changed to a modular format. Using NPM + Gulp to script the builds. Changed to semantic versioning.
 				Added another attempt at media.GetImageTag. It's incomplete ATM.
+	4/14/2016	Moved the java depedencies to a seperate file. This is done to prevent future duplicates.
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
