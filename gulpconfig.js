@@ -1,9 +1,4 @@
 /*  
-                
-               
-                './components/getSectionInfo.js',
-                './components/media.js',
-                './components/security.js',
                 './components/ordinalIndicators.js'
 */
 
@@ -14,6 +9,8 @@ module.exports = {
 				'./components/sitemanager.js',
 				'./components/brokerUtils.js',
 				'./components/elementInfo.js',
+				'./components/getSectionInfo.js',
+				'./components/media.js',
 				'./components/security.js'
     ],
     outputDir: './T4Utils/',
