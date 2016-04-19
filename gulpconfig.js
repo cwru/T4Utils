@@ -1,4 +1,4 @@
-/*  './components/sitemanager.js',
+/*  
                 './components/brokerUtils.js',
                 './components/elementInfo.js',
                 './components/getSectionInfo.js',
@@ -10,7 +10,8 @@
 module.exports = {
     t4version: '8.1.5', //you'll have to config this for your environment
     components: ['./components/javadependencies.js',
-                './components/base.js'               
+                './components/base.js',
+				'./components/sitemanager.js'
     ],
     outputDir: './T4Utils/',
     isProduction: (process.env.NODE_ENV === 'production'), //Set from command line like SET NODE_ENV=production.

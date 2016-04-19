@@ -4,29 +4,29 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Tue Apr 19 2016 12:27:53 GMT-0400 (Eastern Daylight Time).
+ * Built: Tue Apr 19 2016 12:47:42 GMT-0400 (Eastern Daylight Time).
  */
 /**
  * Java dependencies -
- * @version v1.0.3
+ * @version v1.0.0
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 14, 2016
+ * @date April 19, 2016
  * Copyright 2016. MIT licensed.
  */
 /* jshint strict: false */
-/* Java Language */
-importPackage(java.lang);
-/* getSectionInfo.js */
-importClass(com.terminalfour.publish.PathBuilder);
-/* media.js */
+/* Java Language
+importPackage(java.lang); */
+/* getSectionInfo.js 
+importClass(com.terminalfour.publish.PathBuilder); */
+/* media.js 
 importPackage(com.terminalfour.media);
-importPackage(com.terminalfour.media.utils);
-/* ordinalIndicators.js */
+importPackage(com.terminalfour.media.utils);*/
+/* ordinalIndicators.js
 importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 importClass(com.terminalfour.sitemanager.cache.CachedContent);
 importPackage(com.terminalfour.sitemanager);
-importPackage(com.terminalfour.content);
+importPackage(com.terminalfour.content); */
 
 /*  Versioning    
 	6/24/2015 - Initial
@@ -208,3 +208,34 @@ var T4Utils = (function (utils) {
 	};
 	return utils;
 })(T4Utils || {});
+/**
+ * T4Utils.sitemanager - Security namespace for T4
+ * @version v1.0.0
+ * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+ * @author Ben Margevicius
+ * @date April 19, 2016
+ * Copyright 2016. MIT licensed.
+ */
+
+/** 
+	Sitemanager namespace gets information about the sitemanager, duh.	
+*/
+T4Utils.siteManager = T4Utils.siteManager || {};
+
+/**
+*	Returns the version of the site manager
+*	@return {string} The site manager version	
+*/
+T4Utils.siteManager.version = com.terminalfour.sitemanager.SiteManagerVersion.version;
+
+/**
+*	Returns the build details of the site manager
+*	@return {string} The site manager build details	
+*/	
+T4Utils.siteManager.buildDetails = com.terminalfour.sitemanager.SiteManagerVersion.buildDetails;
+
+/**
+*	Returns the java version of the site manager
+*	@return {string} The site manager java version. Note: Anything below java 8 is obsolete. 4/4/16
+*/	
+T4Utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
