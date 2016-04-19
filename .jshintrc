@@ -102,6 +102,7 @@
         "MessageDigest" : true,
         "PathBuilder" : true,
         "ContentHierarchy" : true,
-        "ContentManager" : true
+        "ContentManager" : true,
+		"T4Utils.toString" : false
 	}
 }

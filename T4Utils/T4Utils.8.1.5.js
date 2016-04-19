@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Tue Apr 19 2016 12:58:12 GMT-0400 (Eastern Daylight Time).
+ * Built: Tue Apr 19 2016 14:27:13 GMT-0400 (Eastern Daylight Time).
  */
 /**
  * Java dependencies -
@@ -209,3 +209,69 @@ T4Utils.siteManager.buildDetails = com.terminalfour.sitemanager.SiteManagerVersi
 *	@return {string} The site manager java version. Note: Anything below java 8 is obsolete. 4/4/16
 */	
 T4Utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
+/**
+ * T4Utils.brokerUtils - Broker Utils namespace for T4
+ * @version v1.0.0
+ * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+ * @author Ben Margevicius
+ * @date April 4, 2016
+ * Copyright 2016. MIT licensed.
+ */
+/* jshint strict: false */
+/**
+* Security namespace declaration
+*/
+T4Utils.brokerUtils = T4Utils.brokerUtils || {};
+/**
+*	Processes a t4 tag.
+*	@param {string} t4Tag - HTML style T4 tag that needs to be processed. Typically something from the media library.
+*	@return {string} A string value of the t4 tag output. Depends on the formatters you put in. 
+*/
+T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
+	var myContent = content || null; 
+	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
+};
+/**
+ * T4Utils.security - Security namespace for T4
+ * @version v1.0.0
+ * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+ * @author Ben Margevicius
+ * @date April 4, 2016
+ * Copyright 2016. MIT licensed.
+ */
+
+
+/* jshint strict: false*/
+/**
+* Security namespace declaration
+*/
+T4Utils.security = T4Utils.security || {};
+	
+/**
+*	Hashes a plaintext string into a SHA-256 Hex Encoded String
+*	@param {string} plainText - Plain text value of the 
+*	@return {string} A string value of the hash
+*/	
+T4Utils.security.toSHA256 = function(plainText) {	
+	/* jshint bitwise: false */
+	importPackage(java.security);
+
+	var hash;
+	try
+	{	
+		var md = MessageDigest.getInstance("SHA-256"); //Every implementation is required to have MD5, SHA-1, SHA-256. Don't use MD5 or SHA-1 anymore. 
+		var pwBytes = new java.lang.String(plainText).getBytes("UTF-8");    
+		md.update(pwBytes);
+		var hashedBytes = md.digest();
+		var sb = new java.lang.StringBuffer();
+		for (var i = 0; i < hashedBytes.length; i++) {
+			sb.append(java.lang.Integer.toString((hashedBytes[i] & 0xff) + 0x100, 16).substring(1)); //borrowed from http://www.mkyong.com/java/java-sha-hashing-example/
+		}
+		hash = sb.toString();
+	}
+	catch(e)
+	{        
+		document.write(e);
+	}
+	return hash;
+};
