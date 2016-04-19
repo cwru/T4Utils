@@ -9,11 +9,11 @@
 /* jshint strict: false */
 /* Java Language
 importPackage(java.lang); */
-/* getSectionInfo.js 
-importClass(com.terminalfour.publish.PathBuilder); */
-/* media.js 
+/* getSectionInfo.js */
+importClass(com.terminalfour.publish.PathBuilder); 
+/* media.js */
 importPackage(com.terminalfour.media);
-importPackage(com.terminalfour.media.utils);*/
+importPackage(com.terminalfour.media.utils);
 /* ordinalIndicators.js
 importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 importClass(com.terminalfour.sitemanager.cache.CachedContent);
