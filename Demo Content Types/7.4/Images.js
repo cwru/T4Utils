@@ -19,7 +19,18 @@ try {
         throw( e );
     }
 }
-
+/*
+HTML To write
+<img alt="Ireland Flag" class="" 
+	src="/nursing/media/nursing/images/flags/Ireland.gif" 
+	srcset="/nursing/media/nursing/images/flags/Ireland.gif 1181w, 
+	/nursing/media/nursing/images/flags/Ireland-100x67.gif 100w, /
+	nursing/media/nursing/images/flags/Ireland-768x512.gif 768w, 
+	/nursing/media/nursing/images/flags/Ireland-480x320.gif 480w, 
+	/nursing/media/nursing/images/flags/Ireland-992x662.gif 992w, 
+	/nursing/media/nursing/images/flags/Ireland-320x214.gif 320w" 
+	sizes="(max-width: 768px) 100vw, 22vw" />
+*/
 try
 { 
   var source = "Source"; //cache the name of the source element

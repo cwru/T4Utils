@@ -1,15 +1,14 @@
 /**
  * T4Utils.media - Gets objects from the media library.
- * @version v1.0.1
+ * @version v1.0.2
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 5, 2016
- * Copyright 2016. MIT licensed.
+ * @date April 14, 2016
+ * Copyright 2016. MIT licensed
+ *
+ * 4/14/16 v1.0.2 moved dependancies to javadependencies.js
  */
 /* jshint strict: false */
-/* import java based dependencies */
-importPackage(com.terminalfour.media);
-importPackage(com.terminalfour.media.utils);
 
 /**
 * Media namespace declaration
