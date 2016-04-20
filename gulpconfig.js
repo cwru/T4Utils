@@ -7,8 +7,7 @@ module.exports = {
 				'./components/elementInfo.js',
 				'./components/getSectionInfo.js',
 				'./components/media.js',
-				'./components/security.js',
-				'./components/ordinalIndicators.js'
+				'./components/security.js'				
     ],
     outputDir: './T4Utils/',
     isProduction: (process.env.NODE_ENV === 'production'), //Set from command line like SET NODE_ENV=production.

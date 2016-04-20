@@ -250,14 +250,14 @@ T4Utils.ordinalIndicators.groupFirst = (function() {
     var tid = content.getContentTypeID(),
         sid = section.getID(),
         oCH = new ContentHierarchy(),
-        oCM = ContentManager.getManager(),
+        oCM = com.terminalfour.spring.ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager),
         contentInSection = oCH.getContent(dbStatement,sid,'en'),
         groupFirst = false;
     for (var i = 0; i < contentInSection.length; i++) {
-        if (content.getID() === oCM.get(dbStatement,contentInSection[i],"en").getID()) {
+        if (content.getID() === oCM.get(contentInSection[i],"en").getID()) {
             if (i === 0) {
                 groupFirst = true;
-            } else if (tid !==  oCM.get(dbStatement,contentInSection[i-1],"en").getContentTypeID()) {
+            } else if (tid !==  oCM.get(contentInSection[i-1],"en").getContentTypeID()) {
                 groupFirst = true;
             } else {
                 groupFirst = false;
@@ -275,14 +275,14 @@ T4Utils.ordinalIndicators.groupLast = (function() {
     var tid = content.getContentTypeID(),
         sid = section.getID(),
         oCH = new ContentHierarchy(),
-        oCM = ContentManager.getManager(),
+        oCM = com.terminalfour.spring.ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager),
         contentInSection = oCH.getContent(dbStatement,sid,'en'),
         groupLast = false;
     for (var i = 0; i < contentInSection.length; i++) {
-        if (content.getID() === oCM.get(dbStatement,contentInSection[i],"en").getID()) {
+        if (content.getID() === oCM.get(contentInSection[i],"en").getID()) {
             if (i === contentInSection.length-1) {
                 groupLast = true;
-            } else if (tid !==  oCM.get(dbStatement,contentInSection[i+1],"en").getContentTypeID()) {
+            } else if (tid !==  oCM.get(contentInSection[i+1],"en").getContentTypeID()) {
                 groupLast = true;
             } else {
                 groupLast = false;
