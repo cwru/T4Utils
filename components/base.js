@@ -140,11 +140,15 @@ var T4Utils = (function (utils) {
 	};
 	
 	utils.escapeHtml = function (unsafe) {
+		return org.apache.commons.lang.StringEscapeUtils.escapeHtml(unsafe);
+		
+		/*
 		return unsafe.replace(/&/g, "&amp;")
     			.replace(/</g, "&lt;")
     			.replace(/>/g, "&gt;")
     			.replace(/'/g, "&#039;")
     			.replace(/"/g, "&quot;");	
+				*/
 	};
 	return utils;
 })(T4Utils || {});
