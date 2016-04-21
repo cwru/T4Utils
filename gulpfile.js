@@ -28,7 +28,12 @@ gulp.task('doc', function(cb) {
 		.pipe(jsdoc(cb));
 });
 
-gulp.task('build-utils', ['clean'], function() {
+gulp.task('copy-libs', ['clean'], function () {
+	gulp.src('./node_modules/bottlejs/dist/bottle.js')
+		.pipe(gulp.dest('./components/libs/'));
+});
+
+gulp.task('build-utils', ['clean', 'copy-libs'], function() {		
 	return gulp.src(config.components)
 		.pipe(jshint()) 	//check our js
 		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors
@@ -41,4 +46,4 @@ gulp.task('build-utils', ['clean'], function() {
 });
 
 
-gulp.task('default', ['clean','build-utils']);
+gulp.task('default', ['clean', 'copy-libs', 'build-utils']);

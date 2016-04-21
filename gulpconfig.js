@@ -1,6 +1,7 @@
 module.exports = {
     t4version: '7.4', //you'll have to config this for your environment
-    components: ['./components/javadependencies.js',
+    components: ['./components/libs/bottle.js',
+				'./components/javadependencies.js',
                 './components/base.js',
                 './components/sitemanager.js',
                 './components/brokerUtils.js',

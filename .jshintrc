@@ -102,6 +102,10 @@
         "MessageDigest" : true,
         "PathBuilder" : true,
         "ContentHierarchy" : true,
-        "ContentManager" : true
+        "ContentManager" : true,
+		"exports": true,
+		"module": true,
+		"global": true, 
+		"define": true
 	}
 }
