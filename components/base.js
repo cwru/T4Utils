@@ -1,3 +1,12 @@
+/**
+* base.js
+* @version v1.0.3
+* @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
+* @author Ben Margevicius 
+* @date April 21, 2016
+* Copyright 2016. MIT licensed.
+*/
+
 /*  Versioning    
 	6/24/2015 - Initial
 	6/30/2015 - Added stuff from T4's javascript util (https://community.terminalfour.com/forum/index.php?topic=426.0)
@@ -31,6 +40,7 @@
 	4/5/2016	Changed to a modular format. Using NPM + Gulp to script the builds. Changed to semantic versioning.
 				Added another attempt at media.GetImageTag. It's incomplete ATM.
 	4/14/2016	Moved the java depedencies to a seperate file. This is done to prevent future duplicates.
+	
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -83,6 +93,7 @@
 
 'use strict';
 /*jshint -W097*/
+
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
 

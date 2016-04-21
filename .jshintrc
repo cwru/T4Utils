@@ -103,6 +103,7 @@
         "PathBuilder" : true,
         "ContentHierarchy" : true,
         "ContentManager" : true,
+		"Bottle": true,
 		"exports": true,
 		"module": true,
 		"global": true, 
