@@ -1,10 +1,12 @@
 /**
 * T4Utils.ordinalIndicators
-* @version v1.0.0
+* @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
 * @author Joel Eisner
 * @date April 15, 2016
 * Copyright 2016. MIT licensed.
+*
+* 4/21/2016 - bdm4@case - Removed dependencies on ContentManager and ContentHierarchy
 */
 /* jshint strict: false */
 

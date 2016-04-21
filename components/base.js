@@ -40,7 +40,13 @@
 	4/5/2016	Changed to a modular format. Using NPM + Gulp to script the builds. Changed to semantic versioning.
 				Added another attempt at media.GetImageTag. It's incomplete ATM.
 	4/14/2016	Moved the java depedencies to a seperate file. This is done to prevent future duplicates.
-	
+	4/21/2016	Added bottlejs dependency resolver to remove T4 based dependecies. 
+				Added bottlejs npm resolver. Added copy-libs to gulp to copy from node_modules to ./components/libs/
+				Added dependencyinject.js for our T4 object factories
+				Modded the first part of ordinalIndicators to demostrate how to use DI. 
+	Todo: Mocking and Unit Testing
+						
+				
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
