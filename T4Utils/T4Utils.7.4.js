@@ -15,18 +15,18 @@
  * Copyright 2016. MIT licensed.
  */
 /* jshint strict: false */
-/* Java Language */
-importPackage(java.lang);
+/* Java Language 
+importPackage(java.lang);*/
 /* getSectionInfo.js */
 importClass(com.terminalfour.publish.PathBuilder);
 /* media.js */
 importPackage(com.terminalfour.media);
 importPackage(com.terminalfour.media.utils);
-/* ordinalIndicators.js */
+/* ordinalIndicators.js 
 importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 importClass(com.terminalfour.sitemanager.cache.CachedContent);
 importPackage(com.terminalfour.sitemanager);
-importPackage(com.terminalfour.content);
+importPackage(com.terminalfour.content);*/
 
 /*  Versioning    
 	6/24/2015 - Initial
