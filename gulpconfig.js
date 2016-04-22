@@ -12,7 +12,7 @@ module.exports = {
                 './components/security.js'
     ],
     outputDir: './T4Utils/',
-    isProduction: (process.env.NODE_ENV === 'production'), //Set from command line like SET NODE_ENV=production.
+    isProduction: (process.env.NODE_ENV === 'production'), //From Windows command line:SET NODE_ENV=production. MAC: EXPORT NODE_ENV=production
     banner: ['/**',
             ' * <%= package.name %> - <%= package.description %>',
             ' * @version v<%= package.version %>',

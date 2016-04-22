@@ -17,6 +17,6 @@ T4Utils.brokerUtils = T4Utils.brokerUtils || {};
 *	@return {string} A string value of the t4 tag output. Depends on the formatters you put in. 
 */
 T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
-	var myContent = content || null; 
-	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, myContent, language, isPreview, t4Tag); 
+	var context = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
+	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, context, language, isPreview, t4Tag); 
 };
