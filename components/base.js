@@ -186,12 +186,10 @@ var T4Utils = (function (utils) {
 		return new java.lang.String(this); //this is crazy.		
 	};
 	
+	
+	
 	utils.escapeHtml = function (unsafe) {
-		return unsafe.replace(/&/g, "&amp;")
-    			.replace(/</g, "&lt;")
-    			.replace(/>/g, "&gt;")
-    			.replace(/'/g, "&#039;");
-    			//.replace(/"/g, "&quot;");	
+		return org.apache.commons.lang.StringEscapeUtils.escapeHTML(unsafe);		
 	};
 	return utils;
 })(T4Utils || {});
