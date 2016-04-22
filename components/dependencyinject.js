@@ -28,3 +28,4 @@ var bottle = new Bottle(); //setup our DI container
 
 bottle.service('oCM', function () { return ContentManager.getManager(); });
 bottle.service('oCH', function () { return new ContentHierarchy(); }); //??????
+bottle.service('oConn', function() { dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
