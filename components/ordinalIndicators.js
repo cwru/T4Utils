@@ -273,11 +273,11 @@ T4Utils.ordinalIndicators.groupFirst = (function() {
 * Find if the position of the content within a groupset is the last of its kind
 * @return {bool} true if last, false if not
 */
-T4Utils.ordinalIndicators.groupLast = (function() {
+T4Utils.ordinalIndicators.groupLast = (function(oCM) {
     var tid = content.getTemplateID(),
         sid = section.getID(),
-        oCH = new ContentHierarchy(),
-        oCM = ContentManager.getManager(),
+        oCH = bottle.container.oCH,
+        oCM = bottle.container.oCM,
         contentInSection = oCH.getContent(dbStatement,sid,'en'),
         groupLast = false;
     for (var i = 0; i < contentInSection.length; i++) {

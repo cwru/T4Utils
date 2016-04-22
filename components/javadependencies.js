@@ -9,6 +9,7 @@
 /* jshint strict: false */
 /* Java Language */
 importPackage(java.lang);
+
 /* getSectionInfo.js */
 importClass(com.terminalfour.publish.PathBuilder);
 /* media.js */
