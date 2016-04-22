@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Fri Apr 22 2016 12:01:12 GMT-0400 (Eastern Daylight Time).
+ * Built: Fri Apr 22 2016 13:03:39 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -655,6 +655,7 @@
 /* jshint strict: false */
 /* Java Language */
 importPackage(java.lang);
+
 /* getSectionInfo.js */
 importClass(com.terminalfour.publish.PathBuilder);
 /* media.js */
@@ -891,10 +892,18 @@ var T4Utils = (function (utils) {
  +	* Escapes an html encoded string <tag class="something"> should become &lt;tag class=&quot;something&quot;&gt
  +	* @param {string} unsafe - The HTML encoded string you want to convert
  +	* @return {java.lang.String} The HTML escaped string.		
- +	*/
+ +	
 	utils.escapeHtml = function (unsafe) {
-		return org.apache.commons.lang.StringEscapeUtils.escapeHtml4(unsafe);		
-	};
+		try {
+			var escaped = "<Escape me>";
+			return StringEscapeUtils.escapeHtml4(escaped);				
+		}
+		catch(err)
+		{
+			document.write("Error in escapeHtml.");
+			document.write(err.message);
+		}
+	};*/
 	return utils;
 })(T4Utils || {});
 /**
