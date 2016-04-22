@@ -16,6 +16,8 @@ T4Utils.elementInfo = T4Utils.elementInfo || {};
 /**
 *	Get all of the elements within the piece of content
 *	@return {ContentElement[]} An array containing the elements within the piece of content.
+* 	Usage: for(var i = 0; i < elc; i++) { var el = els.get (i); }
+* 	Usage2: for each (var el in els.toArray ()) { document.write('<p>' + el.getAliasName () + ': ' + el.publish()); }
 */	
 T4Utils.elementInfo.getElements = function() {
 	var c = content || null;
