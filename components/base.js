@@ -187,7 +187,11 @@ var T4Utils = (function (utils) {
 	};
 	
 	
-	
+	/**
+ +	* Escapes an html encoded string <tag class="something"> should become &lt;tag class=&quot;something&quot;&gt
+ +	* @param {string} unsafe - The HTML encoded string you want to convert
+ +	* @return {java.lang.String} The HTML escaped string.		
+ +	*/
 	utils.escapeHtml = function (unsafe) {
 		return org.apache.commons.lang.StringEscapeUtils.escapeHTML(unsafe);		
 	};
