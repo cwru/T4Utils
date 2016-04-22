@@ -193,7 +193,7 @@ var T4Utils = (function (utils) {
  +	* @return {java.lang.String} The HTML escaped string.		
  +	*/
 	utils.escapeHtml = function (unsafe) {
-		return org.apache.commons.lang.StringEscapeUtils.escapeHTML(unsafe);		
+		return org.apache.commons.lang.StringEscapeUtils.escapeHtml4(unsafe);		
 	};
 	return utils;
 })(T4Utils || {});
