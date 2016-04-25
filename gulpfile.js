@@ -46,4 +46,4 @@ gulp.task('build-utils', ['clean', 'copy-libs'], function() {
 });
 
 
-gulp.task('default', ['clean', 'copy-libs', 'build-utils', 'doc');
+gulp.task('default', ['clean', 'copy-libs', 'build-utils', 'doc']);
