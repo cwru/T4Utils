@@ -4,6 +4,7 @@ module.exports = {
 				'./components/javadependencies.js',
 				'./components/dependencyinject.js',
                 './components/base.js',
+				'./components/console.js',
                 './components/sitemanager.js',
                 './components/brokerUtils.js',
                 './components/elementInfo.js',
