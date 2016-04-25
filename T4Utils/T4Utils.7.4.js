@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Mon Apr 25 2016 12:39:15 GMT-0400 (Eastern Daylight Time).
+ * Built: Mon Apr 25 2016 14:51:45 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -811,57 +811,22 @@ var T4Utils = (function (utils) {
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
-	
-	
+		
 	/**
 	* Writes a message to the browser console 
-	* @function console	
+	* @function console
+	* @deprecated Please use T4Utils.console.log, warn, error instead. 	
 	* @param {string} consoleMethod - You can specify which console method you want to use. "log, warn, error" are valid. 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+	* @example T4Utils.console("log", "Logging a message");
 	*/
-	utils.console = function(consoleMethod, textOrObj) {		
+	T4Utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string") 
 		{			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
 		}
 	};
 	
-	/**
-	* Writes a message to the browser console
-	* @function log
-	* @memberof console
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.log = function(textOrObj) {		
-		if(typeof textOrObj === "string")	
-		{			
-			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
-		}
-	};
-	
-	/**
-	* Writes a warning to the browser console 
-	* @function console~warn
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.warn = function(textOrObj) {		
-		if(typeof textOrObj === "string")
-		{
-			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
-		}
-	};
-	
-	/**
-	* Writes an error to the browser console 
-	* @function console.error
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.error = function(textOrObj) {		
-		if(typeof textOrObj === "string")
-		{
-			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
-		}
-	};
 	
 	/**
 	* Writes a paragraph formatted HTML message to the browser 
@@ -917,6 +882,61 @@ var T4Utils = (function (utils) {
 	};*/
 	return utils;
 })(T4Utils || {});
+
+/**
+ * T4Utils.console - console writer for browser based messages. 
+ * @file console.js
+ * @namespace T4Utils.console 
+ * @extends T4Utils
+ * @version v1.0.0
+ * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+ * @author Ben Margevicius
+ * @date April 25, 2016
+ * Copyright 2016. MIT licensed.
+ */
+/* jshint strict: false */
+ 
+T4Utils.console = T4Utils.console || {};
+
+/**
+* Writes a message to the browser console
+* @function log
+* @memberof T4Utils.console
+* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+*/
+T4Utils.console.log = function(textOrObj) {		
+	if(typeof textOrObj === "string")	
+	{			
+		document.write("<script>console.log('" + textOrObj + "');</script>\n");				
+	}
+};
+
+/**
+* Writes a warning to the browser console 
+* @function warn
+* @memberof T4Utils.console
+* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+*/
+T4Utils.console.warn = function(textOrObj) {		
+	if(typeof textOrObj === "string")
+	{
+		document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
+	}
+};
+
+/**
+* Writes an error to the browser console 
+* @function error
+* @memberof T4Utils.console
+* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+*/
+T4Utils.console.error = function(textOrObj) {		
+	if(typeof textOrObj === "string")
+	{
+		document.write("<script>console.error('" + textOrObj + "');</script>\n");				
+	}
+};
+
 /**
  * T4Utils.sitemanager - Security namespace for T4
  * @version v1.0.0
