@@ -119,7 +119,7 @@ var T4Utils = (function (utils) {
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	* @example T4Utils.console("log", "Logging a message");
 	*/
-	T4Utils.console = function(consoleMethod, textOrObj) {		
+	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string") 
 		{			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
@@ -148,20 +148,7 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
-	};
-	
-	/**
-	* Converts a javascript object to Java string by prototying
-	* @function toJavaString
-	* @return {java.lang.String} The converted object.	
-	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
-	* jshint -w121 extending the native javascript String object.
-	*/
-	/*jshint -W121*/
-	String.prototype.toJavaString = function () {
-		return new java.lang.String(this); //this is crazy.		
-	};
-	
+	};	
 	
 	/**
  +	* Escapes an html encoded string <tag class="something"> should become &lt;tag class=&quot;something&quot;&gt
@@ -181,3 +168,17 @@ var T4Utils = (function (utils) {
 	};*/
 	return utils;
 })(T4Utils || {});
+
+/**
+	* Converts a javascript object to Java string by prototying
+	* @function toJavaString
+	* @memberof String
+	* @return {java.lang.String} The converted object.	
+	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
+	* jshint -w121 extending the native javascript String object.
+	*/
+/*jshint -W121*/
+String.prototype.toJavaString = function () {
+	return new java.lang.String(this); //this is crazy.		
+};
+	
