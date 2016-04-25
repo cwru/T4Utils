@@ -23,9 +23,9 @@ gulp.task('clean', function () {
 	return del(config.outputDir + '**/*.js'); //when bottlejs gets its jsdocs fixed update to **/*.js
 });
 
-gulp.task('doc', function(cb) {
+gulp.task('doc', ['clean', 'copy-libs', 'build-utils'],  function(doc) {
 	gulp.src(config.outputDir + "*.js", {read: false})
-		.pipe(jsdoc(cb));
+		.pipe(jsdoc(doc));
 });
 
 gulp.task('copy-libs', ['clean'], function () {
