@@ -19,6 +19,7 @@ T4Utils.console = T4Utils.console || {};
 * @function log
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.log("Console message");
 */
 T4Utils.console.log = function(textOrObj) {		
 	if(typeof textOrObj === "string")	
@@ -32,6 +33,7 @@ T4Utils.console.log = function(textOrObj) {
 * @function warn
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.warn("Console warning");
 */
 T4Utils.console.warn = function(textOrObj) {		
 	if(typeof textOrObj === "string")
@@ -45,6 +47,7 @@ T4Utils.console.warn = function(textOrObj) {
 * @function error
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.warn("Console error");
 */
 T4Utils.console.error = function(textOrObj) {		
 	if(typeof textOrObj === "string")
