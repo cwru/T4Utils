@@ -166,6 +166,7 @@ var T4Utils = (function (utils) {
     
 	/**
 	* Converts a javascript object to Java string
+	* @function T4Utils.toString()
 	* @param {object} obj - The object you want to convert
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
