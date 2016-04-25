@@ -1,10 +1,11 @@
 /**
 * base.js
+* @namespace T4Utils
 * @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
 * @author Ben Margevicius 
 * @date April 21, 2016
-* Copyright 2016. MIT licensed.
+* @copyright Ben Margevicius 2016. MIT licensed.
 */
 
 /*  Versioning    
@@ -105,6 +106,7 @@ var T4Utils = (function (utils) {
 
 	/**
 	* Outputs the version of this utility
+	* @function version
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
@@ -112,6 +114,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a message to the browser console 
+	* @function console	
 	* @param {string} consoleMethod - You can specify which console method you want to use. "log, warn, error" are valid. 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
@@ -123,7 +126,9 @@ var T4Utils = (function (utils) {
 	};
 	
 	/**
-	* Writes a message to the browser console 
+	* Writes a message to the browser console
+	* @function log
+	* @memberof console
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.log = function(textOrObj) {		
@@ -135,6 +140,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a warning to the browser console 
+	* @function console~warn
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.warn = function(textOrObj) {		
@@ -146,6 +152,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes an error to the browser console 
+	* @function console.error
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.error = function(textOrObj) {		
@@ -157,6 +164,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a paragraph formatted HTML message to the browser 
+	* @function write
 	* @param {string} text - The text you want to write to the screen.
 	*/
     utils.write = function(text)
@@ -166,7 +174,8 @@ var T4Utils = (function (utils) {
     
 	/**
 	* Converts a javascript object to Java string
-	* @function T4Utils.toString()
+	* @function toString
+	* @deprecated Use string.protoype.toJavaString
 	* @param {object} obj - The object you want to convert
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
@@ -178,6 +187,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Converts a javascript object to Java string by prototying
+	* @function toJavaString
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
 	* jshint -w121 extending the native javascript String object.

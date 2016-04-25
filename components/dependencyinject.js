@@ -16,7 +16,7 @@ But then in order to consume the method from the content type you'd have to call
 *
 * So as of the writing of this I am going to go with a glofied global variable. This way we can resolve our dependencies within the media library, without polluting the global namespace with global variables. 
 *
-* dependencyinject.js
+* @file dependencyinject.js
 * @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
 * @author Ben Margevicius 

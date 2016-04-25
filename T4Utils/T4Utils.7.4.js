@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Fri Apr 22 2016 13:03:39 GMT-0400 (Eastern Daylight Time).
+ * Built: Mon Apr 25 2016 12:39:15 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -102,7 +102,7 @@
      * @param Object obj
      * @param String prop
      * @return mixed
-     * @throws
+     * @throws throw an exception if it encounters an undefined path
      */
     var getNested = function getNested(obj, prop) {
         var service = obj[prop];
@@ -491,7 +491,7 @@
      *
      * @param String name
      * @param mixed val
-     * @return
+     * @return this
      */
     var value = function value(name, val) {
         var parts;
@@ -685,7 +685,7 @@ But then in order to consume the method from the content type you'd have to call
 *
 * So as of the writing of this I am going to go with a glofied global variable. This way we can resolve our dependencies within the media library, without polluting the global namespace with global variables. 
 *
-* dependencyinject.js
+* @file dependencyinject.js
 * @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
 * @author Ben Margevicius 
@@ -701,11 +701,12 @@ bottle.service('oConn', function() { dbStatement.getConnection(); }); //https://
 
 /**
 * base.js
+* @namespace T4Utils
 * @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
 * @author Ben Margevicius 
 * @date April 21, 2016
-* Copyright 2016. MIT licensed.
+* @copyright Ben Margevicius 2016. MIT licensed.
 */
 
 /*  Versioning    
@@ -806,6 +807,7 @@ var T4Utils = (function (utils) {
 
 	/**
 	* Outputs the version of this utility
+	* @function version
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
@@ -813,6 +815,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a message to the browser console 
+	* @function console	
 	* @param {string} consoleMethod - You can specify which console method you want to use. "log, warn, error" are valid. 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
@@ -824,7 +827,9 @@ var T4Utils = (function (utils) {
 	};
 	
 	/**
-	* Writes a message to the browser console 
+	* Writes a message to the browser console
+	* @function log
+	* @memberof console
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.log = function(textOrObj) {		
@@ -836,6 +841,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a warning to the browser console 
+	* @function console~warn
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.warn = function(textOrObj) {		
@@ -847,6 +853,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes an error to the browser console 
+	* @function console.error
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	*/
 	utils.console.error = function(textOrObj) {		
@@ -858,6 +865,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Writes a paragraph formatted HTML message to the browser 
+	* @function write
 	* @param {string} text - The text you want to write to the screen.
 	*/
     utils.write = function(text)
@@ -867,6 +875,8 @@ var T4Utils = (function (utils) {
     
 	/**
 	* Converts a javascript object to Java string
+	* @function toString
+	* @deprecated Use string.protoype.toJavaString
 	* @param {object} obj - The object you want to convert
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
@@ -878,6 +888,7 @@ var T4Utils = (function (utils) {
 	
 	/**
 	* Converts a javascript object to Java string by prototying
+	* @function toJavaString
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
 	* jshint -w121 extending the native javascript String object.
@@ -940,21 +951,25 @@ T4Utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
 
 /**
  * T4Utils.brokerUtils - Broker Utils namespace for T4
- * @version v1.0.0
+ * @file brokerUtils.js
+ * @namespace T4Utils.brokerUtils 
+ * @extends T4Utils
+ * @version v1.0.3
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
  */
 /* jshint strict: false */
-/**
-* Security namespace declaration
-*/
+
 T4Utils.brokerUtils = T4Utils.brokerUtils || {};
 /**
-*	Processes a t4 tag.
+*	Processes a t4 tag. T4Utils~processT4Tag
+*	@function processT4Tag
+* 	@memberof T4Utils.brokerUtils
 *	@param {string} t4Tag - HTML style T4 tag that needs to be processed. Typically something from the media library.
 *	@return {string} A string value of the t4 tag output. Depends on the formatters you put in. 
+* 	@example T4Utils.processT4Tag("<t4 id=123456' formatter='css/*' />");
 */
 T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
 	var context = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
@@ -1205,6 +1220,9 @@ T4Utils.getSectionInfo.getLevel = function (section) {
 };
 /**
  * T4Utils.media - Gets objects from the media library.
+ * @file media.js
+ * @namespace T4Utils.media
+ * @extends T4Utils
  * @version v1.0.2
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
@@ -1215,15 +1233,13 @@ T4Utils.getSectionInfo.getLevel = function (section) {
  */
 /* jshint strict: false */
 
-/**
-* Media namespace declaration
-*/
 T4Utils.media = T4Utils.media || {};
 
 /**
 *	Gets an array of image variantids. 
-*	@param {Media} - Media Element from the site manager.
-*	@return {array[int]} Returns an array of media ids.		
+*	@function media.getImageVariantsIds
+*	@param {Media} mediaElement - Media Element from the site manager.
+*	@return {int[]} Returns an array of media ids.		
 */
 T4Utils.media.getImageVariantsIds = function(mediaElement) {
 	var imageID = content.get(mediaElement).getID();
@@ -1233,7 +1249,8 @@ T4Utils.media.getImageVariantsIds = function(mediaElement) {
 
 /**
 *	Gets the dimensions of a media object, obviously you should pass in a picture.
-*	@param {object}  T4Utils.getMediaObect
+*	@function media.getImageDimensions
+*	@param {object} mediaObj - T4Utils.getMediaObect
 *	@return {object} Returns an object that has two properties. width and height. 
 */
 T4Utils.media.getImageDimensions = function(mediaObj) { 
@@ -1245,13 +1262,21 @@ T4Utils.media.getImageDimensions = function(mediaObj) {
 
 /**
 *	Get a media object from it's id. Note this is not the same as the media element
-*	@param {int} The id of the media object you are trying to return.
+* 	@function media.getMediaObject
+*	@param {int} mediaID - The id of the media object you are trying to return.
 *	@return {object} Returns a media object
 */
 T4Utils.media.getMediaObject = function(mediaID) {		
 	return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
 };
 
+/**
+*	Get a media object from it's id. Note this is not the same as the media element
+* 	@function media.getImageTag
+*	@ignore 
+*	@param {int} mediaID - The id of the media object you are trying to return.
+*	@return {object} Returns a media object
+*/
 T4Utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
 {
 	var imagesrc = '';

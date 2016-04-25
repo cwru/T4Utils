@@ -94,7 +94,7 @@
      * @param Object obj
      * @param String prop
      * @return mixed
-     * @throws
+     * @throws throw an exception if it encounters an undefined path
      */
     var getNested = function getNested(obj, prop) {
         var service = obj[prop];
@@ -483,7 +483,7 @@
      *
      * @param String name
      * @param mixed val
-     * @return
+     * @return this
      */
     var value = function value(name, val) {
         var parts;

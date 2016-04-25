@@ -20,7 +20,7 @@ var gulp = require('gulp'),
     config = require('./gulpconfig.js');
 
 gulp.task('clean', function () {
-	return del(config.outputDir + '**/*.js');
+	return del(config.outputDir + '**/*.js'); //when bottlejs gets its jsdocs fixed update to **/*.js
 });
 
 gulp.task('doc', function(cb) {
