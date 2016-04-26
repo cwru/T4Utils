@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Tue Apr 26 2016 14:46:41 GMT-0400 (Eastern Daylight Time).
+ * Built: Tue Apr 26 2016 18:17:05 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -981,32 +981,37 @@ T4Utils.console.error = function(textOrObj) {
 
 /**
  * T4Utils.sitemanager - Security namespace for T4
- * @version v1.0.0
+ * @file sitemanager.js
+ * @namespace T4Utils.siteManager 
+ * @extends T4Utils
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
  */
 
-/** 
-	Sitemanager namespace gets information about the sitemanager, duh.	
-*/
 T4Utils.siteManager = T4Utils.siteManager || {};
 
 /**
 *	Returns the version of the site manager
+* 	@function version
+*	@memberof T4Utils.siteManager
 *	@return {string} The site manager version	
 */
 T4Utils.siteManager.version = com.terminalfour.sitemanager.SiteManagerVersion.version;
 
 /**
 *	Returns the build details of the site manager
+*  	@function buildDetails
+* 	@memberof T4Utils.siteManager
 *	@return {string} The site manager build details	
 */	
 T4Utils.siteManager.buildDetails = com.terminalfour.sitemanager.SiteManagerVersion.buildDetails;
 
 /**
 *	Returns the java version of the site manager
+*  	@function javaVersion
+* 	@memberof T4Utils.siteManager	
 *	@return {string} The site manager java version. Note: Anything below java 8 is obsolete. 4/4/16
 */	
 T4Utils.siteManager.javaVersion = java.lang.System.getProperty("java.version");
@@ -1448,22 +1453,22 @@ T4Utils.media.getImageTag = function(imageSource, altText, cssClass, sizesQuery)
 };
 /**
  * T4Utils.security - Security namespace for T4
+ * @file security.js
+ * @namespace T4Utils.security 
+ * @extends T4Utils
  * @version v1.0.0
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
  */
-
-
 /* jshint strict: false*/
-/**
-* Security namespace declaration
-*/
 T4Utils.security = T4Utils.security || {};
 	
 /**
 *	Hashes a plaintext string into a SHA-256 Hex Encoded String
+*	@function toSHA256
+* 	@memberof T4Utils.security
 *	@param {string} plainText - Plain text value of the 
 *	@return {string} A string value of the hash
 */	
