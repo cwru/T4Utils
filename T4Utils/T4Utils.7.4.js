@@ -703,6 +703,7 @@ importPackage(com.terminalfour.content);
 		getId: function() {
 			return 1;
 		}
+		//other instance methods here. 
     };
 })();
 var instance1 = ContentManager.getManager();
@@ -713,7 +714,7 @@ var instance2 = ContentManager.getManager();
 /**
 * @file dependencyinject.js
 * @version v1.0.3
-* @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
+* @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius 
 * @date April 15, 2016
 * Copyright 2016. MIT licensed.
@@ -737,7 +738,7 @@ var bottle = (function(undefined) {
 * base.js
 * @namespace T4Utils
 * @version v1.0.3
-* @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
+* @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius 
 * @date April 21, 2016
 * @copyright Ben Margevicius 2016. MIT licensed.
@@ -1338,7 +1339,9 @@ T4Utils.getSectionInfo.getLevel = function (section) {
  * @date April 14, 2016
  * Copyright 2016. MIT licensed  
  */
-/* 4/14/16 v1.0.2 moved dependancies to javadependencies.js */
+/* 4/14/16 v1.0.2 moved dependancies to javadependencies.js 
+	When the D
+*/
 /* jshint strict: false */
 
 T4Utils.media = T4Utils.media || {};
@@ -1357,7 +1360,7 @@ var myid = T4Utils.elementInfo.getElementID(source);
 var variants = T4Utils.media.getImageVariantsIds(source); //get the variants of the media element
 */
 T4Utils.media.getImageVariantsIds = function(mediaElement, mediaManager, oConn) {
-	if(mediaManager === undefined) {
+	if(mediaManager === undefined) { 
 		mediaManager = MediaManager.getManager();
 	}
 	if(oConn === undefined) {

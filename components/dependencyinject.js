@@ -34,6 +34,7 @@
 		getId: function() {
 			return 1;
 		}
+		//other instance methods here. 
     };
 })();
 var instance1 = ContentManager.getManager();
@@ -44,7 +45,7 @@ var instance2 = ContentManager.getManager();
 /**
 * @file dependencyinject.js
 * @version v1.0.3
-* @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
+* @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius 
 * @date April 15, 2016
 * Copyright 2016. MIT licensed.

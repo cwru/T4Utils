@@ -2,7 +2,7 @@
 * base.js
 * @namespace T4Utils
 * @version v1.0.3
-* @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
+* @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
 * @author Ben Margevicius 
 * @date April 21, 2016
 * @copyright Ben Margevicius 2016. MIT licensed.

@@ -9,7 +9,9 @@
  * @date April 14, 2016
  * Copyright 2016. MIT licensed  
  */
-/* 4/14/16 v1.0.2 moved dependancies to javadependencies.js */
+/* 4/14/16 v1.0.2 moved dependancies to javadependencies.js 
+	When the D
+*/
 /* jshint strict: false */
 
 T4Utils.media = T4Utils.media || {};
@@ -28,7 +30,7 @@ var myid = T4Utils.elementInfo.getElementID(source);
 var variants = T4Utils.media.getImageVariantsIds(source); //get the variants of the media element
 */
 T4Utils.media.getImageVariantsIds = function(mediaElement, mediaManager, oConn) {
-	if(mediaManager === undefined) {
+	if(mediaManager === undefined) { 
 		mediaManager = MediaManager.getManager();
 	}
 	if(oConn === undefined) {
