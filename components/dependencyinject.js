@@ -24,8 +24,14 @@ But then in order to consume the method from the content type you'd have to call
 * Copyright 2016. MIT licensed.
 */
 /* jshint strict: false */
-var bottle = new Bottle(); //setup our DI container
+var bottle = (function(undefined) {
+	var b = new Bottle(); //setup our DI container
+	b.service('oCM', function () { return ContentManager.getManager(); });
+	b.service('oCH', function () { return new ContentHierarchy(); }); //??????
+	b.service('oConn', function() { return dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
+	b.service('oMM', function() { return MediaManager.getManager(); });
+	b.service('oMU', function() { return MediaUtils; }); 	
+	return b;
+})();
 
-bottle.service('oCM', function () { return ContentManager.getManager(); });
-bottle.service('oCH', function () { return new ContentHierarchy(); }); //??????
-bottle.service('oConn', function() { dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
+

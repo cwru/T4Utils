@@ -103,14 +103,14 @@
 
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
-
+	
 	/**
 	* Outputs the version of this utility
 	* @function version
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
-		
+	
 	/**
 	* Writes a message to the browser console 
 	* @function console
@@ -168,6 +168,7 @@ var T4Utils = (function (utils) {
 	};*/
 	return utils;
 })(T4Utils || {});
+T4Utils.Bottle = bottle; //inject our dependencies throughout the util. They can be referenced by T4Utils.Bottle.container.<dependency>
 
 /**
 	* Converts a javascript object to Java string by prototying
@@ -181,4 +182,6 @@ var T4Utils = (function (utils) {
 String.prototype.toJavaString = function () {
 	return new java.lang.String(this); //this is crazy.		
 };
+
+
 	

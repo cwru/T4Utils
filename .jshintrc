@@ -105,9 +105,10 @@
         "ContentHierarchy" : true,
         "ContentManager" : true,
 		"Bottle": true,
+		"bottle": true,
 		"exports": true,
 		"module": true,
 		"global": true, 
-		"define": true
+		"define": true		
 	}
 }

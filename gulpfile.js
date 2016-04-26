@@ -24,6 +24,8 @@ gulp.task('clean', function () {
 });
 
 gulp.task('doc', ['clean', 'copy-libs', 'build-utils'],  function(doc) {
+	
+	
 	gulp.src(config.outputDir + "*.js", {read: false})
 		.pipe(jsdoc(doc));
 });
@@ -45,5 +47,8 @@ gulp.task('build-utils', ['clean', 'copy-libs'], function() {
 		.pipe(gulp.dest(config.outputDir));
 });
 
+gulp.task('watch', function() {
+	gulp.watch(config.components, ['build-utils']);	
+});
 
-gulp.task('default', ['clean', 'copy-libs', 'build-utils', 'doc']);
+gulp.task('default', ['watch', 'clean', 'copy-libs', 'build-utils', 'doc']);

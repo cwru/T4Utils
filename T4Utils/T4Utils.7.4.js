@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Mon Apr 25 2016 15:53:51 GMT-0400 (Eastern Daylight Time).
+ * Built: Tue Apr 26 2016 14:46:41 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -693,11 +693,17 @@ But then in order to consume the method from the content type you'd have to call
 * Copyright 2016. MIT licensed.
 */
 /* jshint strict: false */
-var bottle = new Bottle(); //setup our DI container
+var bottle = (function(undefined) {
+	var b = new Bottle(); //setup our DI container
+	b.service('oCM', function () { return ContentManager.getManager(); });
+	b.service('oCH', function () { return new ContentHierarchy(); }); //??????
+	b.service('oConn', function() { return dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
+	b.service('oMM', function() { return MediaManager.getManager(); });
+	b.service('oMU', function() { return MediaUtils; }); 	
+	return b;
+})();
 
-bottle.service('oCM', function () { return ContentManager.getManager(); });
-bottle.service('oCH', function () { return new ContentHierarchy(); }); //??????
-bottle.service('oConn', function() { dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
+
 
 /**
 * base.js
@@ -804,14 +810,14 @@ bottle.service('oConn', function() { dbStatement.getConnection(); }); //https://
 
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
-
+	
 	/**
 	* Outputs the version of this utility
 	* @function version
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
-		
+	
 	/**
 	* Writes a message to the browser console 
 	* @function console
@@ -820,7 +826,7 @@ var T4Utils = (function (utils) {
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
 	* @example T4Utils.console("log", "Logging a message");
 	*/
-	T4Utils.console = function(consoleMethod, textOrObj) {		
+	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string") 
 		{			
 			document.write("<script>console." + consoleMethod + "('" + textOrObj + "');</script>\n");				
@@ -849,20 +855,7 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
-	};
-	
-	/**
-	* Converts a javascript object to Java string by prototying
-	* @function toJavaString
-	* @return {java.lang.String} The converted object.	
-	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
-	* jshint -w121 extending the native javascript String object.
-	*/
-	/*jshint -W121*/
-	String.prototype.toJavaString = function () {
-		return new java.lang.String(this); //this is crazy.		
-	};
-	
+	};	
 	
 	/**
  +	* Escapes an html encoded string <tag class="something"> should become &lt;tag class=&quot;something&quot;&gt
@@ -882,6 +875,23 @@ var T4Utils = (function (utils) {
 	};*/
 	return utils;
 })(T4Utils || {});
+T4Utils.Bottle = bottle; //inject our dependencies throughout the util. They can be referenced by T4Utils.Bottle.container.<dependency>
+
+/**
+	* Converts a javascript object to Java string by prototying
+	* @function toJavaString
+	* @memberof String
+	* @return {java.lang.String} The converted object.	
+	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
+	* jshint -w121 extending the native javascript String object.
+	*/
+/*jshint -W121*/
+String.prototype.toJavaString = function () {
+	return new java.lang.String(this); //this is crazy.		
+};
+
+
+	
 
 /**
  * T4Utils.console - console writer for browser based messages. 
@@ -903,6 +913,7 @@ T4Utils.console = T4Utils.console || {};
 * @function log
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.log("Console message");
 */
 T4Utils.console.log = function(textOrObj) {		
 	if(typeof textOrObj === "string")	
@@ -916,6 +927,7 @@ T4Utils.console.log = function(textOrObj) {
 * @function warn
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.warn("Console warning");
 */
 T4Utils.console.warn = function(textOrObj) {		
 	if(typeof textOrObj === "string")
@@ -929,6 +941,7 @@ T4Utils.console.warn = function(textOrObj) {
 * @function error
 * @memberof T4Utils.console
 * @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+* @example T4Utils.console.warn("Console error");
 */
 T4Utils.console.error = function(textOrObj) {		
 	if(typeof textOrObj === "string")
@@ -996,44 +1009,56 @@ T4Utils.brokerUtils.processT4Tag = function (t4Tag) {
 	return com.terminalfour.publish.utils.BrokerUtils.processT4Tags(dbStatement, publishCache, section, context, language, isPreview, t4Tag); 
 };
 /**
- * T4Utils.elementInfo - elementInfo namespace for T4
+ * T4Utils.elementInfo - elementInfo namespace for T4. This namespace will retrieve infomation about the declared 'elements' within a content type
+ * @file elementInfo.js
+ * @namespace T4Utils.elementInfo 
+ * @extends T4Utils
  * @version v1.0.0
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
- */
- 
+ */ 
 /* jshint strict: false */
-/**
-* elementInfo namespace declaration
-*/
-T4Utils.elementInfo = T4Utils.elementInfo || {};
 
+T4Utils.elementInfo = T4Utils.elementInfo || {};
 /**
 *	Get all of the elements within the piece of content
+*	@function getElements 
+*	@memberof T4Utils.elementInfo	
+*	@example <caption>How to loop through the elements of a content type</caption>
+		var els = T4Utils.elementInfo.getElements();  
+		T4Utils.write("I have: " + els.length + " elements");  
+		for(var i = 0; i < els.length; i++)
+		{
+			var el = els[i];		
+			T4Utils.write("element[" + i + "]: " + el.getName()); //gets the name
+			T4Utils.write("element[" + i + "]: " + el.publish()); //gets the published value. 
+		}	
 *	@return {ContentElement[]} An array containing the elements within the piece of content.
-* 	Usage: for(var i = 0; i < elc; i++) { var el = els.get (i); }
-* 	Usage2: for each (var el in els.toArray ()) { document.write('<p>' + el.getAliasName () + ': ' + el.publish()); }
+* 	@exception Will throw an error if content is null
 */	
 T4Utils.elementInfo.getElements = function() {
-	var c = content || null;
+	var c = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
 	if(c !== null) {
-		c.getElements();	
+		return c.getElements();	
 	}
 	else {
-		return null;
+		throw "Error: content does not have any elements";
 	}
 };
 
 /**
 *	If the element is "text", get its' "publish" value as a String.
+*	@function getElementValue 
+*	@memberof T4Utils.elementInfo	
 *	@param {string} element - The string value of the name of the element
 *	@return {string} The value of the element. Can be null if the supplied value is already null.
+* 	@exception Will throw an error if content is null
 */
 T4Utils.elementInfo.getElementValue = function(element) 
 {
-	var c = content || null; 
+	var c = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
 	if(c !== null)
 	{
 		var el = c.get(element); //returns a contentelement type
@@ -1042,17 +1067,22 @@ T4Utils.elementInfo.getElementValue = function(element)
 			return el.publish();	
 		}
 	}	
-	return null;
+	else {
+		throw "Error: content does not have any elements";
+	}
 };	
 
 /**
 *	Used to get the name of the element.
+* 	@function getElementName 
+*	@memberof T4Utils.elementInfo	
 *	@param {string} element - The string value of the name of the element
 *	@return {string} The name of the element
+* 	@exception Will throw an error if content is null
 */ 
 T4Utils.elementInfo.getElementName = function(element) 
 {
-	var c = content || null; 
+	var c = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
 	if(c !== null)
 	{	
 		var el = c.get(element);
@@ -1061,17 +1091,22 @@ T4Utils.elementInfo.getElementName = function(element)
 			return c.get(element).getName();	
 		}			
 	}
-	return null;
+	else {
+		throw "Error: content does not have any elements";
+	}
 };
 
 /**
 *	Used to get the ID of the element.
+*	@function getElementID 
+*	@memberof T4Utils.elementInfo	
 *	@param {string} element - The string value of the name of the element
 *	@return {string} The ID of the element
+*	@exception Will throw an error if content is null
 */
 T4Utils.elementInfo.getElementID = function(element) 
 {
-	var c = content || null; 
+	var c = (typeof content !== 'undefined') ? content : null; //see issue #10 for this
 	if(c !== null)
 	{
 		var el = c.get(element); //Returns a CachedContent type?
@@ -1080,39 +1115,44 @@ T4Utils.elementInfo.getElementID = function(element)
 			return el.getID();
 		}			
 	}
-	return null;
+	else {
+		throw "Error: content does not have any elements";
+	}
 };	
  /**
  * T4Utils.getSectionInfo - getSectionInfo namespace gets information about a section. duh.
- * @version v1.0.2
+ * @file getSectionInfo.js
+ * @namespace T4Utils.getSectionInfo 
+ * @extends T4Utils
+ * @version v1.0.3
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
- * @date April 4, 2016
+ * @date April 25, 2016
  * Copyright 2016. MIT licensed.
  *
  * v1.0.2 Moved dependencies
- *
- */
- 
+ * v1.0.3 Cleaned up comments. Fixed some small issues.
+ */ 
 /* jshint strict: false */
-
-/**
-* Security namespace declaration
-*/
 T4Utils.getSectionInfo = T4Utils.getSectionInfo || {};
 
 /** 
-	Gets the publish link from a local variable. You have to setPublishLink first
-	@return will return the publishing Link
+*	Gets the publish link from a local variable. You have to setPublishLink first
+*	@function getPublishLink
+* 	@memberof T4Utils.getSectionInfo
+*	@return will return the publishing Link
 */
 T4Utils.getSectionInfo.getPublishLink = function () {
 	return this.publishLink;
 };
 
 /**
-*	Get a link to this section
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
-*	@return {null} - stores the publishLink in the T4Utils.publishLink object. Use getPublishLink getter to get that object. Returns the PublishLink type in T4
+*	Sets a link to section
+*	@function setPublishLink
+* 	@memberof T4Utils.getSectionInfo
+*	@inner
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
+*	@return {PublishLink} - stores the publishLink in the T4Utils.publishLink object. Use getPublishLink getter to get that object. Returns the PublishLink type in T4
 */
 T4Utils.getSectionInfo.setPublishLink = function (section) {
 	this.publishLink = PathBuilder.getLink(dbStatement, section, publishCache, language, isPreview); //cache the call         
@@ -1121,7 +1161,9 @@ T4Utils.getSectionInfo.setPublishLink = function (section) {
 
 /**
 *	Gets the section title for the section passed in
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@function sectionTitle
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@return {string} - The name of the section
 */
 T4Utils.getSectionInfo.sectionTitle = function (section) {
@@ -1131,7 +1173,9 @@ T4Utils.getSectionInfo.sectionTitle = function (section) {
 
 /**
 *	Gets the section link for the section passed in
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@function sectionLink
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@return {string} - The link of the section
 */
 T4Utils.getSectionInfo.sectionLink = function (section) {
@@ -1140,10 +1184,13 @@ T4Utils.getSectionInfo.sectionLink = function (section) {
 };
 
 /**
-*	Gets the section link for the section passed in
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	Gets an HTML anchor tag for a section. If you want just the link please use getLink()
+*	@function anchorLink
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@return {string} - Returns a fully formed HTML anchor link for the section passed in
 */
+//Note try this.publishLink.toString() 
 T4Utils.getSectionInfo.anchorLink = function (section) {
 	this.setPublishLink(section);
 	var theLink = this.publishLink.getLink();
@@ -1155,7 +1202,9 @@ T4Utils.getSectionInfo.anchorLink = function (section) {
 
 /**
 *	Gets the directory for the section passed in
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@function getDirectory
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@return {string} - Get the directory on the filesystem that this section will be published to
 */
 T4Utils.getSectionInfo.getDirectory = function(section) {
@@ -1165,7 +1214,9 @@ T4Utils.getSectionInfo.getDirectory = function(section) {
 /** 
 *	This is an adaptation of the CachedSection.GetChildren method in the API. 		
 *	There is an issue where section.getChildren() does not output the sections in order they are listed in the siteManager.
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@function getChildren
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 * 	@param {boolean} isHiddenInNAV - if is isHiddenInNAV is true then it will NOT output hidden sections.
 *	@return {Content[]} Outputs an array of chilen in the expected order listed in the site manager.	
 */
@@ -1178,8 +1229,10 @@ T4Utils.getSectionInfo.getChildren = function(section, isHiddenInNAV) {
 
 
 /**
-*	Gets the path to root from currentSection
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	Gets the path to root from currentSection, Note if you have microsites this will goto the root of everything.
+*	@function getRootPath
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@returns {Section[]} Returns an array of sections until root. Including the current section.    
 */
 T4Utils.getSectionInfo.getRootPath = function (currentSection) {             
@@ -1187,12 +1240,16 @@ T4Utils.getSectionInfo.getRootPath = function (currentSection) {
 };   
 
 /**
-*	@usage
-*	T4Utils.getSectionInfo.getPathUntilLevel(0, section); //go until level 0, otherwise known as root. 
-*	T4Utils.getSectionInfo.getPathUntilLevel(2, section); //go until two levels up. 
+*	Gets a path from the current section until we are N steps from root
+*	@function getPathUntilLevel
+* 	@memberof T4Utils.getSectionInfo
 *	@param {int} finalLevel - How far down do you want to traverse
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@param {CachedSection} section - There is a predefined 'section; object you can pass here.
 * 	@param {array} path - Used for recursively finding the path to finalLevel
+* 	@example <caption>Get path to root</caption>
+		T4Utils.getSectionInfo.getPathUntilLevel(0, section); 
+*	@example <caption>Get path to two levels above root</caption>
+		T4Utils.getSectionInfo.getPathUntilLevel(2, section);
 *	@return {String[]} - Gets a path from the current section until we get to a certain level. 
 */
 T4Utils.getSectionInfo.getPathUntilLevel = function(finalLevel, currentSection, path)
@@ -1210,11 +1267,13 @@ T4Utils.getSectionInfo.getPathUntilLevel = function(finalLevel, currentSection, 
 
 /**
 *	Gets a path from the current section until we are N steps up from root
-*	@usage
-*	T4Utils.getSectionInfo.getPathBySteps(1, section); //go 1 step back otherwise get the parent
+*	@function getPathBySteps
+* 	@memberof T4Utils.getSectionInfo
 *	@param {int} stepsUp - How far up do you want to traverse
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+*	@param {CachedSection} section - There is a predefined 'section; object you can pass here.
 * 	@param {array} path - Used for recursively finding the path to finalLevel
+* 	@example <caption>go 1 step back otherwise get the parent</caption>
+		T4Utils.getSectionInfo.getPathBySteps(1, section);
 *	@return {String[]} - Gets a path from the current section until we get to a certain level. 	
 */
 T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
@@ -1232,7 +1291,9 @@ T4Utils.getSectionInfo.getPathBySteps = function(stepsUp, currentSection, path)
 
 /**
 *	Get the level of which the section is at. 
-*	@param {Cachedsection} section - There is a predefined 'section; object you can pass here.
+* 	@function getLevel
+* 	@memberof T4Utils.getSectionInfo
+*	@param {CachedSection} section - There is a predefined section object you can pass here.
 *	@return {int} - Returns an int of the level of which the section is at.     
 */
 T4Utils.getSectionInfo.getLevel = function (section) {
@@ -1247,52 +1308,88 @@ T4Utils.getSectionInfo.getLevel = function (section) {
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 14, 2016
- * Copyright 2016. MIT licensed
- *
- * 4/14/16 v1.0.2 moved dependancies to javadependencies.js
+ * Copyright 2016. MIT licensed  
  */
+/* 4/14/16 v1.0.2 moved dependancies to javadependencies.js */
 /* jshint strict: false */
 
 T4Utils.media = T4Utils.media || {};
 
 /**
-*	Gets an array of image variantids. 
-*	@function media.getImageVariantsIds
+*	Gets an array of image variant ids. 
+*	@function getImageVariantsIds
+* 	@memberof T4Utils.media
 *	@param {Media} mediaElement - Media Element from the site manager.
+	@param {MediaManager} mediaManager - T4 Media Manager
+	@param {dbStatement} oConn - T4 connection to the database?
 *	@return {int[]} Returns an array of media ids.		
+* 	@example <caption>Get image variant ids</caption>
+var source = "Source Image Element"; //cache the name of the source element
+var myid = T4Utils.elementInfo.getElementID(source);
+var variants = T4Utils.media.getImageVariantsIds(source); //get the variants of the media element
 */
-T4Utils.media.getImageVariantsIds = function(mediaElement) {
+T4Utils.media.getImageVariantsIds = function(mediaElement, mediaManager, oConn) {
+	if(mediaManager === undefined) {
+		mediaManager = MediaManager.getManager();
+	}
+	if(oConn === undefined) {
+		oConn = dbStatement.getConnection();
+	}
 	var imageID = content.get(mediaElement).getID();
-	var variantIds = MediaManager.getManager().getMediaVariants(dbStatement.getConnection(), imageID, language);  	
+	var variantIds = mediaManager.getMediaVariants(oConn, imageID, language);  	
 	return variantIds;
 };
 
 /**
 *	Gets the dimensions of a media object, obviously you should pass in a picture.
-*	@function media.getImageDimensions
-*	@param {object} mediaObj - T4Utils.getMediaObect
+*	@function getImageDimensions
+*	@memberof T4Utils.media
+*	@param {object} mediaObj - T4Utils.getMediaObject
+	@param {MediaUtils} mediaUtil - T4 MediaUtils object
 *	@return {object} Returns an object that has two properties. width and height. 
+	@example <caption>Get image variant ids and dimenstions</caption>
+var source = "Source Image Element"; //cache the name of the source element
+var myid = T4Utils.elementInfo.getElementID(source);		
+var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of Media
+var sourceDimensions = T4Utils.media.getImageDimensions(sourceMediaObject);
 */
-T4Utils.media.getImageDimensions = function(mediaObj) { 
+T4Utils.media.getImageDimensions = function(mediaObj, mediaUtil) { 
 	var d = { width: 0, height: 0 };
-	d.width = MediaUtils.getImageDimensions(mediaObj)[0];
-	d.height = MediaUtils.getImageDimensions(mediaObj)[1];
+	if(mediaUtil === undefined) {
+		mediaUtil = MediaUtils; //
+	}
+	d.width = mediaUtil.getImageDimensions(mediaObj)[0];
+	d.height = mediaUtil.getImageDimensions(mediaObj)[1];
 	return d;
 };
 
 /**
 *	Get a media object from it's id. Note this is not the same as the media element
-* 	@function media.getMediaObject
-*	@param {int} mediaID - The id of the media object you are trying to return.
+* 	@function getMediaObject
+*	@memberof T4Utils.media
+*	@param {int} mediaID - The id of the media object you are trying to return.	
 *	@return {object} Returns a media object
+*	@example <caption>Get image variant ids and dimenstions</caption>
+var source = "Source Image Element"; //cache the name of the source element
+var myid = T4Utils.elementInfo.getElementID(source);		
+var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of Media		
 */
-T4Utils.media.getMediaObject = function(mediaID) {		
-	return MediaManager.getManager().get(dbStatement.getConnection(), mediaID, language);  
+T4Utils.media.getMediaObject = function(mediaID) {
+	try
+	{
+		var oMM = T4Utils.Bottle.container.oMM;	//refernce to MediaManager.getManager()
+		return oMM.get(T4Utils.Bottle.container.oConn, mediaID, language);  
+	}
+	catch (err)
+	{
+		document.write(err.message);
+	}
 };
 
 /**
 *	Get a media object from it's id. Note this is not the same as the media element
-* 	@function media.getImageTag
+* 	@function getImageTag
+*	@memberof T4Utils.media
 *	@ignore 
 *	@param {int} mediaID - The id of the media object you are trying to return.
 *	@return {object} Returns a media object
