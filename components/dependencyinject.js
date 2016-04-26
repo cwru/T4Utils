@@ -1,21 +1,47 @@
-/**
+/*
 * Inject T4 Dependencies within our Utils class
-* This is a crude way of using the DI pattern. However, given the circumstances I chose this way to handle dependency resolution.
-* I added the bottlejs injection lib.  
 * https://github.com/young-steveo/bottlejs
 * 
 * Methodology
-* We could go full constructor style injection into our components, however that would cause a little bit of a headache
-* When resolving those dependencies from programmable content type in T4. Essentially you'd have to call 
-* bottle.container.<injected>. Bottle is resolved in the T4Util.js file that resides in the media library. This makes knowing to do something from the content creation POV like T4Utils.SomeNamespace.Method(bottle.container.oCM) a little weird. 
-
-We could of created our dependencies in the bottle object like
-bottle.service('T4Utils.namespace.method', T4Utils.namespace.method, 'dependency1')
-But then in order to consume the method from the content type you'd have to call it by doing bottle.container.T4Utils.namespace.method
-* Which is also not the easiest thing to know. 
+* Given the circumstances, I am not sure I did this correctly. The way I did this is more like an interface.
+* I specifically avoided 'constructor' based DI resolution because I wanted to keep T4Objects out of content types. i.e. T4Utils.doSomethingWithMedia(MediaManager.getManager()); 
+* That would mean if on upgrade of T4, and the media manager would change you'd have to update all of you content types.
+* So what I did is with the bottlejs DI container library put all of T4 dependencies in there. This will no pollution in the global namspace.
+* Then I pass bottle to T4Utils in base.js. I think this is a form of interface injection, or maybe you can call it prototype injection. 
+* Then you can reference your dependencies throughout the class with T4Utils.Bottle.container.<dependency>.
 *
-* So as of the writing of this I am going to go with a glofied global variable. This way we can resolve our dependencies within the media library, without polluting the global namespace with global variables. 
+* When we start implementing unit tests we'll see if this method works. The next thing to do is mock T4 Classes.
+* Since T4Objects objects don't exist in a test we could just implement the parts of them that is used in the utility.
+* I am guessing it would look something like:
 *
+* http://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern
+* http://www.dofactory.com/javascript/singleton-design-pattern
+* var ContentManager = (function () {
+    var instance;
+ 
+    function createInstance() {
+        var object = new Object("I am the ContentManager");
+        return object;
+    }
+ 
+    return {
+        getManager: function () {
+            if (!instance) {
+                instance = createInstance();
+            }
+            return instance;
+        }
+		getId: function() {
+			return 1;
+		}
+    };
+})();
+var instance1 = ContentManager.getManager();
+var instance2 = ContentManager.getManager();
+ 
+  alert("Same instance? " + (instance1 === instance2));  
+*/
+/**
 * @file dependencyinject.js
 * @version v1.0.3
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
@@ -23,6 +49,8 @@ But then in order to consume the method from the content type you'd have to call
 * @date April 15, 2016
 * Copyright 2016. MIT licensed.
 */
+
+
 /* jshint strict: false */
 var bottle = (function(undefined) {
 	var b = new Bottle(); //setup our DI container
