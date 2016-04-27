@@ -51,4 +51,4 @@ gulp.task('watch', function() {
 	gulp.watch(config.components, ['build-utils']);	
 });
 
-gulp.task('default', ['watch', 'clean', 'copy-libs', 'build-utils', 'doc']);
+gulp.task('default', ['clean', 'copy-libs', 'build-utils', 'doc']);
