@@ -1,22 +1,53 @@
 /**
-* T4Utils.ordinalIndicators
+* T4Utils.ordinalIndicators - This namespace provides 
 * @version v1.0.3
+* @file ordinalIndicators.js
+* @namespace T4Utils.ordinalIndicators 
+* @extends T4Utils
 * @link git+https://github.com/virginiacommonwealthuniversity/T4Utils.git
-* @author Joel Eisner
+* @author Joel Eisner, Ben Margevicius
 * @date April 15, 2016
 * Copyright 2016. MIT licensed.
-*
-* 4/21/2016 - bdm4@case - Removed dependencies on ContentManager and ContentHierarchy
 */
 /* jshint strict: false */
 
-/**
-* Ordinal indicators namespace declaration
-*/
+/* 4/21/2016 - bdm4@case - Removed dependencies on ContentManager and ContentHierarchy */
+
 T4Utils.ordinalIndicators = T4Utils.ordinalIndicators || {};
 
 /**
+* Return an array of unique values. 
+* @function uniqueSorter
+* @memberof T4Utils.ordinalIndicators
+* @param {array} arr - The array that's to be sorted on key and pruned.* 
+* @return {array} - An array that is sorted and pruned.
+*/
+T4Utils.ordinalIndicators.uniqueSorter = function (arr) {
+	var comparer = function compareObject(a, b) { //compare two objects in an array. 
+		if (a.key === b.key) { //if the objects are the same 
+			return 0; 		//No sorting should be done
+		} else {
+			if (a.key < b.key) { 
+				return -1; 	//sort a to be lower than b
+			} else {
+				return 1; 	//sort b to be lower than a. 
+			}
+		}
+	};
+	arr.sort(comparer); //sort our array
+	
+	for (var i = 0; i < arr.length - 1; ++i) { //foreach object in that array 
+		if (comparer(arr[i], arr[i+1]) === 0) { //if the objects are the same 
+			arr.splice(i, 1);	//remove that object from the array
+		}
+	}
+	return arr; //return an array of distinct values. 
+};
+
+/**
 * Find if the position of the content within the page is the first of its kind
+* @function pageFirst
+* @memberof T4Utils.ordinalIndicators
 * @return {bool} true if first, false if not
 */
 T4Utils.ordinalIndicators.pageFirst = (function() {
@@ -92,6 +123,8 @@ T4Utils.ordinalIndicators.pageFirst = (function() {
 
 /**
 * Find if the position of the content within the page is the last of its kind
+* @function pageLast
+* @memberof T4Utils.ordinalIndicators
 * @return {bool} true if last, false if not
 */
 T4Utils.ordinalIndicators.pageLast = (function() {
@@ -169,6 +202,8 @@ T4Utils.ordinalIndicators.pageLast = (function() {
 
 /**
 * Find index of the content within the page
+* @function pageIndex
+* @memberof T4Utils.ordinalIndicators
 * @return {int} the content's index number (starting from 0)
 */
 T4Utils.ordinalIndicators.pageIndex = (function() {
@@ -246,13 +281,15 @@ T4Utils.ordinalIndicators.pageIndex = (function() {
 
 /**
 * Find if the position of the content within a groupset is the first of its kind
+* @function groupFirst
+* @memberof T4Utils.ordinalIndicators
 * @return {bool} true if first, false if not
 */
 T4Utils.ordinalIndicators.groupFirst = (function() {
     var tid = content.getTemplateID(),
         sid = section.getID(),
-        oCH = bottle.container.oCH,
-        oCM = bottle.container.oCM,
+        oCH = T4Utils.Bottle.container.oCH,
+        oCM = T4Utils.Bottle.container.oCM,
         contentInSection = oCH.getContent(dbStatement,sid,'en'),
         groupFirst = false;
     for (var i = 0; i < contentInSection.length; i++) {
@@ -271,13 +308,15 @@ T4Utils.ordinalIndicators.groupFirst = (function() {
 
 /**
 * Find if the position of the content within a groupset is the last of its kind
+* @function groupLast
+* @memberof T4Utils.ordinalIndicators
 * @return {bool} true if last, false if not
 */
-T4Utils.ordinalIndicators.groupLast = (function(oCM) {
+T4Utils.ordinalIndicators.groupLast = (function() {
     var tid = content.getTemplateID(),
         sid = section.getID(),
-        oCH = bottle.container.oCH,
-        oCM = bottle.container.oCM,
+        oCH = T4Utils.Bottle.container.oCH, //get the ContentHierarchy Object
+        oCM = T4Utils.Bottle.container.oCM, //get the Content Manager 
         contentInSection = oCH.getContent(dbStatement,sid,'en'),
         groupLast = false;
     for (var i = 0; i < contentInSection.length; i++) {
