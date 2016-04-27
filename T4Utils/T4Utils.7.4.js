@@ -4,7 +4,7 @@
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * Copyright 2016. MIT licensed.
- * Built: Tue Apr 26 2016 18:17:05 GMT-0400 (Eastern Daylight Time).
+ * Built: Wed Apr 27 2016 12:02:13 GMT-0400 (Eastern Daylight Time).
  */
 ;(function(undefined) {
     'use strict';
@@ -726,7 +726,7 @@ var bottle = (function(undefined) {
 	var b = new Bottle(); //setup our DI container
 	b.service('oCM', function () { return ContentManager.getManager(); });
 	b.service('oCH', function () { return new ContentHierarchy(); }); //??????
-	b.service('oConn', function() { return dbStatement.getConnection(); }); //https://community.terminalfour.com/forum/index.php?topic=477.0
+	b.service('oConn', function() { return dbStatement; }); //https://community.terminalfour.com/forum/index.php?topic=477.0
 	b.service('oMM', function() { return MediaManager.getManager(); });
 	b.service('oMU', function() { return MediaUtils; }); 	
 	return b;
@@ -1369,10 +1369,10 @@ T4Utils.media.getImageVariantsIds = function(mediaElement, mediaManager, oConn) 
 		mediaManager = MediaManager.getManager();
 	}
 	if(oConn === undefined) {
-		oConn = dbStatement.getConnection();
+		oConn = dbStatement;
 	}
 	var imageID = content.get(mediaElement).getID();
-	var variantIds = mediaManager.getMediaVariants(oConn, imageID, language);  	
+	var variantIds = mediaManager.getMediaVariants(oConn.getConnection(), imageID, language);  	
 	return variantIds;
 };
 
@@ -1413,8 +1413,9 @@ var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of 
 T4Utils.media.getMediaObject = function(mediaID) {
 	try
 	{
-		var oMM = T4Utils.Bottle.container.oMM;	//refernce to MediaManager.getManager()
-		return oMM.get(T4Utils.Bottle.container.oConn, mediaID, language);  
+		var oMM = T4Utils.Bottle.container.oMM,	//refernce to MediaManager.getManager()
+			oConn = T4Utils.Bottle.container.oConn;
+		return oMM.get(oConn.getConnection(), mediaID, language);  
 	}
 	catch (err)
 	{
