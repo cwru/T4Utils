@@ -1,7 +1,7 @@
 [![forthebadge](http://forthebadge.com/images/badges/powered-by-case-western-reserve.svg)](http://forthebadge.com)
 
   Ben Margevicius; bdm4@case.edu
-	Version 1.0.0 4/4/2016
+	Version 1.0.3 4/22/2016
 	The latest build is in the T4Utils directory. Or you can install node.js, npm update, then run gulp to execute gulpfile.js script. Warning: jshint is throwing a ton of errors. 
 	
 	Github source: https://github.com/FPBSchoolOfNursing/T4Utils/
@@ -31,3 +31,8 @@
 	catch (err) {
 		T4Utils.console.error(err.message);
 	}
+
+	#Help Dox
+	HowTo: https://community.terminalfour.com/how-to/-/programmable-layouts/
+	V7.X API Dox: https://community.terminalfour.com/info/api/sitemanager-7.3/index.html
+	V8 API Dox: https://community.terminalfour.com/info/api/terminalfour-8.0/

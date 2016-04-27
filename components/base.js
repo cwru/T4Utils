@@ -1,3 +1,13 @@
+/**
+* base.js
+* @namespace T4Utils
+* @version v1.0.3
+* @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
+* @author Ben Margevicius 
+* @date April 21, 2016
+* @copyright Ben Margevicius 2016. MIT licensed.
+*/
+
 /*  Versioning    
 	6/24/2015 - Initial
 	6/30/2015 - Added stuff from T4's javascript util (https://community.terminalfour.com/forum/index.php?topic=426.0)
@@ -31,6 +41,13 @@
 	4/5/2016	Changed to a modular format. Using NPM + Gulp to script the builds. Changed to semantic versioning.
 				Added another attempt at media.GetImageTag. It's incomplete ATM.
 	4/14/2016	Moved the java depedencies to a seperate file. This is done to prevent future duplicates.
+	4/21/2016	Added bottlejs dependency resolver to remove T4 based dependecies. 
+				Added bottlejs npm resolver. Added copy-libs to gulp to copy from node_modules to ./components/libs/
+				Added dependencyinject.js for our T4 object factories
+				Modded the first part of ordinalIndicators to demostrate how to use DI. 
+	Todo: Mocking and Unit Testing
+						
+				
 	Usage:
 	1) Add a content type, modify the content layout, paste this at the top of your layout. 
 	2) Your code will go below the T4Utils Object
@@ -83,20 +100,24 @@
 
 'use strict';
 /*jshint -W097*/
+
 /** Class representing T4Utils */
 var T4Utils = (function (utils) { 
-
+	
 	/**
 	* Outputs the version of this utility
+	* @function version
 	* @return {string} The version of the T4Utility Class 
 	*/
 	utils.version = 'v1.0.2_2016.14.04';
 	
-	
 	/**
 	* Writes a message to the browser console 
+	* @function console
+	* @deprecated Please use T4Utils.console.log, warn, error instead. 	
 	* @param {string} consoleMethod - You can specify which console method you want to use. "log, warn, error" are valid. 
 	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
+	* @example T4Utils.console("log", "Logging a message");
 	*/
 	utils.console = function(consoleMethod, textOrObj) {		
 		if(typeof textOrObj === "string") 
@@ -105,41 +126,10 @@ var T4Utils = (function (utils) {
 		}
 	};
 	
-	/**
-	* Writes a message to the browser console 
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.log = function(textOrObj) {		
-		if(typeof textOrObj === "string")	
-		{			
-			document.write("<script>console.log('" + textOrObj + "');</script>\n");				
-		}
-	};
-	
-	/**
-	* Writes a warning to the browser console 
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.warn = function(textOrObj) {		
-		if(typeof textOrObj === "string")
-		{
-			document.write("<script>console.warn('" + textOrObj + "');</script>\n");				
-		}
-	};
-	
-	/**
-	* Writes an error to the browser console 
-	* @param {string} textOrObj - The text you want to write to the screen. With the console method you should be able to write objects as well, but it's not the case from inside the Util class.	
-	*/
-	utils.console.error = function(textOrObj) {		
-		if(typeof textOrObj === "string")
-		{
-			document.write("<script>console.error('" + textOrObj + "');</script>\n");				
-		}
-	};
 	
 	/**
 	* Writes a paragraph formatted HTML message to the browser 
+	* @function write
 	* @param {string} text - The text you want to write to the screen.
 	*/
     utils.write = function(text)
@@ -149,6 +139,8 @@ var T4Utils = (function (utils) {
     
 	/**
 	* Converts a javascript object to Java string
+	* @function toString
+	* @deprecated Use string.protoype.toJavaString
 	* @param {object} obj - The object you want to convert
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
@@ -156,25 +148,40 @@ var T4Utils = (function (utils) {
 	utils.toString = function(obj)
 	{
 		return new java.lang.String(obj); 
-	};
+	};	
 	
 	/**
+ +	* Escapes an html encoded string <tag class="something"> should become &lt;tag class=&quot;something&quot;&gt
+ +	* @param {string} unsafe - The HTML encoded string you want to convert
+ +	* @return {java.lang.String} The HTML escaped string.		
+ +	
+	utils.escapeHtml = function (unsafe) {
+		try {
+			var escaped = "<Escape me>";
+			return StringEscapeUtils.escapeHtml4(escaped);				
+		}
+		catch(err)
+		{
+			document.write("Error in escapeHtml.");
+			document.write(err.message);
+		}
+	};*/
+	return utils;
+})(T4Utils || {});
+T4Utils.Bottle = bottle; //inject our dependencies throughout the util. They can be referenced by T4Utils.Bottle.container.<dependency>
+
+/**
 	* Converts a javascript object to Java string by prototying
+	* @function toJavaString
+	* @memberof String
 	* @return {java.lang.String} The converted object.	
 	* It has happend to me when using utils.elementInfo.getElementValue('') it'll return a java obj? the javascript toString method will not convert that to a javascript string. This will convert to a * string. grumble.
 	* jshint -w121 extending the native javascript String object.
 	*/
-	/*jshint -W121*/
-	String.prototype.toJavaString = function () {
-		return new java.lang.String(this); //this is crazy.		
-	};
+/*jshint -W121*/
+String.prototype.toJavaString = function () {
+	return new java.lang.String(this); //this is crazy.		
+};
+
+
 	
-	utils.escapeHtml = function (unsafe) {
-		return unsafe.replace(/&/g, "&amp;")
-    			.replace(/</g, "&lt;")
-    			.replace(/>/g, "&gt;")
-    			.replace(/'/g, "&#039;");
-    			//.replace(/"/g, "&quot;");	
-	};
-	return utils;
-})(T4Utils || {});

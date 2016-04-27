@@ -20,15 +20,22 @@ var gulp = require('gulp'),
     config = require('./gulpconfig.js');
 
 gulp.task('clean', function () {
-	return del(config.outputDir + '**/*.js');
+	return del(config.outputDir + '**/*.js'); //when bottlejs gets its jsdocs fixed update to **/*.js
 });
 
-gulp.task('doc', function(cb) {
+gulp.task('doc', ['clean', 'copy-libs', 'build-utils'],  function(doc) {
+	
+	
 	gulp.src(config.outputDir + "*.js", {read: false})
-		.pipe(jsdoc(cb));
+		.pipe(jsdoc(doc));
 });
 
-gulp.task('build-utils', ['clean'], function() {
+gulp.task('copy-libs', ['clean'], function () {
+	gulp.src('./node_modules/bottlejs/dist/bottle.js')
+		.pipe(gulp.dest('./components/libs/'));
+});
+
+gulp.task('build-utils', ['clean', 'copy-libs'], function() {		
 	return gulp.src(config.components)
 		.pipe(jshint()) 	//check our js
 		.pipe(jshint.reporter(jshintStylish, {verbose: true})) //report in pretty colors
@@ -40,5 +47,8 @@ gulp.task('build-utils', ['clean'], function() {
 		.pipe(gulp.dest(config.outputDir));
 });
 
+gulp.task('watch', function() {
+	gulp.watch(config.components, ['build-utils']);	
+});
 
-gulp.task('default', ['clean','build-utils']);
+gulp.task('default', ['clean', 'copy-libs', 'build-utils', 'doc']);

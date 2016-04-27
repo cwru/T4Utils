@@ -1,21 +1,21 @@
 /**
  * T4Utils.security - Security namespace for T4
+ * @file security.js
+ * @namespace T4Utils.security 
+ * @extends T4Utils
  * @version v1.0.0
  * @link git+https://github.com/FPBSchoolOfNursing/T4Utils.git
  * @author Ben Margevicius
  * @date April 4, 2016
  * Copyright 2016. MIT licensed.
  */
-
-
 /* jshint strict: false*/
-/**
-* Security namespace declaration
-*/
 T4Utils.security = T4Utils.security || {};
 	
 /**
 *	Hashes a plaintext string into a SHA-256 Hex Encoded String
+*	@function toSHA256
+* 	@memberof T4Utils.security
 *	@param {string} plainText - Plain text value of the 
 *	@return {string} A string value of the hash
 */	
