@@ -34,10 +34,10 @@ T4Utils.media.getImageVariantsIds = function(mediaElement, mediaManager, oConn) 
 		mediaManager = MediaManager.getManager();
 	}
 	if(oConn === undefined) {
-		oConn = dbStatement.getConnection();
+		oConn = dbStatement;
 	}
 	var imageID = content.get(mediaElement).getID();
-	var variantIds = mediaManager.getMediaVariants(oConn, imageID, language);  	
+	var variantIds = mediaManager.getMediaVariants(oConn.getConnection(), imageID, language);  	
 	return variantIds;
 };
 
@@ -78,8 +78,9 @@ var sourceMediaObject = T4Utils.media.getMediaObject(myid); //Returns a type of 
 T4Utils.media.getMediaObject = function(mediaID) {
 	try
 	{
-		var oMM = T4Utils.Bottle.container.oMM;	//refernce to MediaManager.getManager()
-		return oMM.get(T4Utils.Bottle.container.oConn, mediaID, language);  
+		var oMM = T4Utils.Bottle.container.oMM,	//refernce to MediaManager.getManager()
+			oConn = T4Utils.Bottle.container.oConn;
+		return oMM.get(oConn.getConnection(), mediaID, language);  
 	}
 	catch (err)
 	{
