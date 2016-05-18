@@ -24,8 +24,6 @@ gulp.task('clean', function () {
 });
 
 gulp.task('doc', ['clean', 'copy-libs', 'build-utils'],  function(doc) {
-	
-	
 	gulp.src(config.outputDir + "*.js", {read: false})
 		.pipe(jsdoc(doc));
 });

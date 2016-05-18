@@ -15,6 +15,7 @@ T4Utils.security = T4Utils.security || {};
 /**
 *	Hashes a plaintext string into a SHA-256 Hex Encoded String
 *	@function toSHA256
+* 	@deprecated Please use T4Utils.security.toHash method. This function doesn't generate the correct hash 100% of the time.	
 * 	@memberof T4Utils.security
 *	@param {string} plainText - Plain text value of the 
 *	@return {string} A string value of the hash
@@ -44,7 +45,7 @@ T4Utils.security.toSHA256 = function(plainText) {
 };
 
 /**
-*	Hashes a plaintext string into a SHA-256 Hex Encoded String
+*	Hashes a plaintext string into a Hex Encoded String
 *	@function toHash
 * 	@memberof T4Utils.security
 *	@param {string} hashAlgorithm - The hash algorithm you want to use. Valid algorithms are 'MD5', 'SHA-256', 'SHA-384', 'SHA-512'
@@ -65,7 +66,7 @@ T4Utils.security.toHash = function(hashAlgorithm, plainText) {
 	*/	
 	try
 	{
-		var hash = DatatypeConverter.printHexBinary(MessageDigest.getInstance(hashAlgorithm).digest(plainText.getBytes("UTF-8")));
+		var hash = DatatypeConverter.printHexBinary(MessageDigest.getInstance(hashAlgorithm).digest(new java.lang.String(plainText).getBytes("UTF-8")));
 		return hash;
 	}
 	catch(err)
