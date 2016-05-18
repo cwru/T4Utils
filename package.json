@@ -1,6 +1,6 @@
 {
   "name": "t4utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This is a utility class that can be used in conjuntion with content types in the Terminal 4 CMS.",
   "repository": {
     "type": "git",
